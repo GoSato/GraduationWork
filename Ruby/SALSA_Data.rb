@@ -1,7 +1,6 @@
 require 'benchmark'
 
 class PageRank
-	ESP = 0.00001
 
 	def initialize
 	    @p_surf = 0.8   # リンクを辿る確率
@@ -49,42 +48,77 @@ class PageRank
 	end
 
 	def make_init
-		Array.new(@PageSize,1/@PageSize)
+		Array.new(@PageSize,1) #[1/4,1/4,1/4,1/4]
 	end
 
 	def make_matrix
-		@dim = @matrix.size
-		@p = []
+		@dim = @matrix.size #4
+		@a = []
 
 		@dim.times do |i|
 			#ランダム遷移行列を各出リンク数で割った値を格納
-			@p[i] = [] # p[0],p[1],p[2],p[3]
+			@a[i] = [] # p[0],p[1],p[2],p[3]
 			@dim.times do |j|
 				#値に対して出リンク数で割る
 				#例 [0,0,1/2,1/2]
-				@p[i][j] = @matrix[i][j] / ((@matrix)[i].inject(:+) * 1.0)
+				@a[i][j] = @matrix[i][j] / ((@matrix)[i].inject(:+) * 1.0)
 			end
 		end
 	end
 
-	def calc(curr,alpha)
-		loop do
-			prev = curr.clone
-			err = 0
+	def make_ataMatrix
+		@ata = Array.new(@PageSize){Array.new(@PageSize,0)}
 
-			@dim.times do |i|
-				ip = 0
-				@dim.times do |j|
-					ip += @p.transpose[i][j] * prev[j]
+		@dim.times do |i|
+			@dim.times do |j|
+				@dim.times do |k|
+					@ata[i][j] += @a.transpose[i][k] * @a[k][j]
 				end
-				curr[i] = (alpha * ip) + ((1.0 - alpha) / @dim * 1.0)
-				err += (prev[i] - curr[i]).abs
-			end
-
-			if err < ESP
-				return curr
+				k = 0
 			end
 		end
+	end
+
+	def calc_authority(curr)
+		10.times do #試験的に4回
+			prev = curr.clone
+			err = 0
+			sum = 0
+			line = []
+
+			@dim.times do |i|
+				line[i] = 0
+				@dim.times do |j|
+					line[i] += @ata[i][j] * prev[j]
+				end
+				sum += line[i]
+				curr[i] = line[i]
+
+			end
+			
+			@dim.times do |k|
+				curr[k] = curr[k] / sum
+			end
+
+		end
+		return curr
+	end
+
+	def calc_hub(matrix)
+		sum = 0
+		line = []
+		@dim.times do |i|
+			line[i] = 0
+			@dim.times do |j|
+				line[i] += @a[i][j] * matrix[j]
+			end
+			sum += line[i]
+		end
+
+		@dim.times do |k|
+			line[k] = line[k] / sum
+		end
+		return(line)
 	end
 
 	def print_matrix
@@ -101,22 +135,25 @@ end
 
 result = Benchmark.realtime do
 	
-	alpha = ARGV[1].to_f
-	a = PageRank.new
-	init = a.make_init()
+	x = PageRank.new
+	init = x.make_init()
 
-	a.make_matrix()
-	rank = a.calc(init,alpha)
+	x.make_matrix()
+	x.make_ataMatrix()
+	aRank = x.calc_authority(init)
+	hRank = x.calc_hub(aRank)
 
-	puts "-----------------"
-	puts "alpha : #{alpha}"
-
-	a.print_matrix
+	x.print_matrix
 
 	puts "-----------------"
-	puts "score"
-	p rank
+	puts "SALSA_Authority_score"
+	p aRank
+
+	puts "-----------------"
+	puts "SALSA_Hub_score"
+	p hRank
 
 end
 
+puts "-----------------"
 puts "処理時間 #{result}s"
