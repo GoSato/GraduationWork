@@ -3,7 +3,6 @@ require 'benchmark'
 class PageRank
 
 	def initialize
-	    @p_surf = 0.8   # リンクを辿る確率
 	    @url = Hash.new   # urlのリスト
 	    @all_num = Hash.new   # urlの番号
 
@@ -80,7 +79,7 @@ class PageRank
 	end
 
 	def calc_authority(curr)
-		10.times do #試験的に4回
+		15.times do #試験的に15回
 			prev = curr.clone
 			err = 0
 			sum = 0
