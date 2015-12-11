@@ -1,6 +1,6 @@
 require 'benchmark'
 
-class PageRank
+class SALSA
 
 	def initialize
 	    @url = Hash.new   # urlのリスト
@@ -134,7 +134,7 @@ end
 
 result = Benchmark.realtime do
 	
-	x = PageRank.new
+	x = SALSA.new
 	init = x.make_init()
 
 	x.make_matrix()

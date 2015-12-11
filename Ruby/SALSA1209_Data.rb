@@ -60,10 +60,12 @@ class SALSA
 
 	end
 
+	# 初期ベクトル作成
 	def make_init
 		Array.new(@number.size,1) #[1,1,1,1,1]
 	end
 
+	# 隣接行列作成(正規化)
 	def make_matrix(list)
 		@dim = @number.size #5
 		@a = []
@@ -84,6 +86,7 @@ class SALSA
 
 	end
 
+	# 権威行列作成
 	def make_ataMatrix
 		@ata = Array.new(@dim){Array.new(@dim,0)}
 
@@ -97,10 +100,10 @@ class SALSA
 		end
 	end
 
+	# 権威スコア計算
 	def calc_authority(curr)
 		15.times do #試験的に15回
 			prev = curr.clone
-			err = 0
 			sum = 0
 			line = []
 
@@ -122,6 +125,7 @@ class SALSA
 		return curr
 	end
 
+	# ハブスコア計算
 	def calc_hub(matrix)
 		sum = 0
 		line = []
@@ -149,6 +153,7 @@ class SALSA
 		p @a
 	end
 
+	# 下の2つは1つにまとめる
 	def print_aRanking(score)
 		aRank = Hash.new
 		score.size.times do |i|
@@ -191,6 +196,7 @@ result = Benchmark.realtime do
 	aScore = x.calc_authority(init)
 	hScore = x.calc_hub(aScore)
 
+	# 出力
 	x.print_matrix
 
 	puts "-----------------"
