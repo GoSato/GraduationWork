@@ -1,18 +1,42 @@
 require 'benchmark'
 
 class SALSA
+
+	# 入出リンク数が最大のものをSeedPageに
+	def find_SeedPage
+
+		# ページ数カウント用
+		counter = Hash.new
+
+		File.open(ARGV[0]){|file|
+			file.each_line do |line|
+				first_num,second_num = line.chomp!.split(",")
+				
+				num = [first_num,second_num]
+
+				num.size.times do |i|
+					if(counter[num[i]] == nil)
+						counter[num[i]] = 1
+					else
+						counter[num[i]] = counter[num[i]] + 1
+					end
+				end
+			end
+		}
+
+		return counter.max { |a, b| a[1] <=> b[1] }
 	
-	# rootsetからbasesetを作成
-	def extraction
+	end
+	
+	# seedページから初期セットの作成
+	def make_InitialSet(seedPage)
+		
+		# SeedPage
+		list = [seedPage[0]]
 
-		# rootset
-		# list = [11,636,4094,5795,6936,8411,9940,4980,7868,8544,6322]
-		# list = [9,4980,11,636,4094,5795,6936,76,9940,8411,645,1574,2091,5505,5244,8544,7868,6322,7097,6514]
-		list = [34]
-
-		# basesetでの隣接行列
+		# 初期セットの隣接行列
 		matrix = Hash.new { |h,k| h[k] = {} }
-		# ノードにつけられる番号
+		# ページにつけられる番号
 		@number = Hash.new   
 		# ページごとの番号
 		num = 0	
@@ -184,14 +208,18 @@ result = Benchmark.realtime do
 	# SALSAインスタンス作成
 	x = SALSA.new
 
-	# rootsetからbaseset抽出
-	extractionList = x.extraction()
+	# test
+	seedPage = x.find_SeedPage()
+
+	# seedページから初期セット作成
+	InitialSet = x.make_InitialSet(seedPage)
 	
 	# 初期ベクトル定義
 	init = x.make_init()
 
 	# 隣接行列
-	x.make_matrix(extractionList)
+	x.make_matrix(InitialSet)
+
 	# 権威行列
 	x.make_ataMatrix()
 	
@@ -200,6 +228,10 @@ result = Benchmark.realtime do
 	hScore = x.calc_hub(aScore)
 
 	# 出力
+	puts "-----------------"
+	puts "SeedPage"
+	p seedPage
+
 	x.print_matrix
 
 	puts "-----------------"
