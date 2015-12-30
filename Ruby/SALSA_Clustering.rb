@@ -1,6 +1,31 @@
 require 'benchmark'
+require 'matrix'
 
 class SALSA
+
+
+	def make_List
+
+		@dataSetList = Array.new # dateSet中の全ページのリスト
+		@cluster = Array.new
+
+		i = 0
+
+		File.open(ARGV[0]){|file|
+			file.each_line do |line|
+				first_num,second_num = line.chomp!.split(",")
+				@dataSetList[i] = first_num
+				@dataSetList[i+1] = second_num
+				i += 2
+			end
+		}
+
+		@dataSetList = @dataSetList.uniq
+
+		# 全ページのリストを返す
+		return @dataSetList
+		
+	end
 
 	# 入出リンク数が最大のものをSeedPageに
 	def find_SeedPage
@@ -24,7 +49,14 @@ class SALSA
 			end
 		}
 
-		return counter.max { |a, b| a[1] <=> b[1] }
+		# 入出リンク数が最大のものを取り出す
+		max = counter.max { |a, b| a[1] <=> b[1] }
+
+		# リストからシードページを削除
+		#@dataSetList.delete(max[0])
+		$pageList.delete(max[0])
+		
+		return max
 	
 	end
 	
@@ -33,13 +65,14 @@ class SALSA
 		
 		# SeedPage
 		list = [seedPage[0]]
-
 		# 初期セットの隣接行列
-		matrix = Hash.new { |h,k| h[k] = {} }
+		@matrix = Hash.new { |h,k| h[k] = {} }
 		# ページにつけられる番号
 		@number = Hash.new   
 		# ページごとの番号
-		num = 0	
+		@num = 0	
+		# 一時的に追加するようの変数
+		initialSetList = Array.new
 
 		File.open(ARGV[0]){|file| 
 			file.each_line do |line|
@@ -48,16 +81,18 @@ class SALSA
 					if list[i].to_s == first_num || list[i].to_s == second_num
 						
 						if(@number[first_num] == nil)
-							@number[first_num] = num
-							num += 1
+							@number[first_num] = @num
+							@num += 1
+							initialSetList.push(first_num)
 						end
 						
 						if(@number[second_num] == nil)
-							@number[second_num] = num
-							num += 1
+							@number[second_num] = @num
+							@num += 1
+							initialSetList.push(second_num)
 						end
 
-						matrix[@number[first_num]][@number[second_num]] = 1
+						@matrix[@number[first_num]][@number[second_num]] = 1
 
 						break
 					end
@@ -65,15 +100,24 @@ class SALSA
 			end
 		}
 
+		# 初期セットのサイズが100以下の時
+		for i in initialSetList do
+			$pageList.delete(i)
+			@cluster.push(i)
+		end
+
+		#File.write("output1.txt",@cluster)
+
 		File.open(ARGV[0]){|file| 
 
 			file.each_line do |line|
 				first_num,second_num = line.chomp!.split(",")
 				list.size.times do |i|
-					if @number.keys.include?("#{first_num}") && @number.keys.include?("#{second_num}")
+					#if (["#{first_num}","#{second_num}"] - @number.keys).empty?
+					if @number.include?("#{first_num}") && @number.keys.include?("#{second_num}")
 						if list[i].to_s != first_num && list[i].to_s != second_num
 					
-							matrix[@number[first_num]][@number[second_num]] = 1
+							@matrix[@number[first_num]][@number[second_num]] = 1
 
 							break
 						end
@@ -83,7 +127,40 @@ class SALSA
 		
 		}
 
-		return matrix
+		return @matrix
+
+	end
+
+	def add_page(page)
+
+		list = [page]
+
+		File.open(ARGV[0]){|file| 
+			file.each_line do |line|
+				first_num,second_num = line.chomp!.split(",")
+				list.size.times do |i|
+					if list[i].to_s == first_num || list[i].to_s == second_num
+						
+						if(@number[first_num] == nil)
+							@number[first_num] = @num
+							@num += 1
+							@cluster.push(first_num)
+							$pageList.delete(first_num)
+						end
+						
+						if(@number[second_num] == nil)
+							@number[second_num] = @num
+							@num += 1
+							@cluster.push(second_num)
+							$pageList.delete(second_num)
+						end
+
+						#@matrix[@number[first_num]][@number[second_num]] = 1
+						#break
+					end
+				end
+			end
+		}
 
 	end
 
@@ -94,8 +171,11 @@ class SALSA
 
 	# 隣接行列作成(正規化)
 	def make_matrix(list)
+
 		@dim = @number.size #5
 		@a = []
+		@outLinks = []
+		@inLinks = []
 
 		@dim.times do |i|
 			#ランダム遷移行列を各出リンク数で割った値を格納
@@ -109,20 +189,54 @@ class SALSA
 					@a[i][j] = 0	
 				end
 			end
+			@outLinks[i] = list[i].count
 		end
 
+		@listTranspose = @a.transpose
+
+		@dim.times do |i|
+
+			inCount = 0
+
+			@dim.times do |j|
+				if(@listTranspose[i][j] != 0)
+					inCount += 1
+				end
+			end
+			@inLinks[i] = inCount
+		end
+
+		#puts @outLinks
+		#puts @inLinks
 	end
 
 	# 権威行列作成
 	def make_ataMatrix
+
 		@ata = Array.new(@dim){Array.new(@dim,0)}
 
+		# @dim.times do |i|
+		# 	if @listTranspose[i].inject(:+) != 0 
+		# 		@dim.times do |j|
+				
+		# 				@ata[i][j] = (Vector.elements(@listTranspose[i]).inner_product(Vector.elements(@listTranspose[j])))
+
+		# 		end
+		# 	else
+		# 		@ata[i].fill(0)
+
+		# 	end
+		# end
+
 		@dim.times do |i|
-			@dim.times do |j|
-				@dim.times do |k|
-					@ata[i][j] += @a.transpose[i][k] * @a[k][j]
+			if @listTranspose[i].inject(:+) != 0 
+				@dim.times do |j|
+					if @listTranspose[j].inject(:+) != 0 
+						@dim.times do |k|
+								@ata[i][j] += @listTranspose[i][k] * @listTranspose[j][k]
+						end
+					end
 				end
-				k = 0
 			end
 		end
 	end
@@ -149,6 +263,7 @@ class SALSA
 			end
 
 		end
+
 		return curr
 	end
 
@@ -167,7 +282,26 @@ class SALSA
 		@dim.times do |k|
 			line[k] = (line[k] / sum)
 		end
-		return(line)
+		return line
+	end
+
+	def calc_NewScore(matrix, isAuthority)
+
+		newScore = Array.new
+
+		matrix.size.times do |i|
+			if(matrix[i] != 0)
+				if(isAuthority)
+					newScore[i] = matrix[i] * 1.0 / @inLinks[i] * 1.0
+				else
+					newScore[i] = matrix[i] * 1.0 / @outLinks[i] * 1.0
+				end
+			else
+				newScore[i] = 0
+			end
+		end
+
+		return newScore
 	end
 
 	def print_matrix
@@ -175,30 +309,58 @@ class SALSA
 		puts "list"
 		puts @number
 
-		puts "-----------------"
-		puts "matrix"
-		p @a
+		# puts "-----------------"
+		# puts "matrix"
+		# p @a
 	end
 
 	# 下の2つは1つにまとめる
-	def print_aRanking(score)
-		aRank = Hash.new
+	def sort_aRanking(score)
+		@aRank = Hash.new
 		score.size.times do |i|
-			aRank[@number.key(i)] = score[i]
+			@aRank[@number.key(i)] = score[i]
 		end
-		puts "-----------------"
-		puts "authority Ranking"
-		p aRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+
+		return @aRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }		
 	end
 
-	def print_hRanking(score)
-		hRank = Hash.new
-		score.size.times do |i|
-			hRank[@number.key(i)] = score[i]
+	def find_maxAuthority(sortScore)
+
+		maxAuthority = sortScore.max { |a, b| a[1] <=> b[1] }
+		sortScore.shift
+
+		if(maxAuthority[1] > 0.01)
+			return maxAuthority[0]
+		else
+			return nil
 		end
-		puts "-----------------"
-		puts "hub Ranking"
-		p hRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+	end
+
+	def sort_hRanking(score)
+		@hRank = Hash.new
+		score.size.times do |i|
+			@hRank[@number.key(i)] = score[i]
+		end
+
+		return @hRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }		
+	end
+
+	def find_maxHub(sortScore)
+		
+		maxHub = sortScore.max { |a, b| a[1] <=> b[1] }
+		sortScore.shift
+
+		if(maxHub[1] > 0.01)
+			return maxHub[0]
+		else
+			return nil
+		end
+	end
+
+	def print_cluster()
+		p @cluster
+		puts @cluster.size
+		File.write("cluster.txt",@cluster)
 	end
 	
 end
@@ -206,45 +368,101 @@ end
 result = Benchmark.realtime do
 	
 	# SALSAインスタンス作成
-	x = SALSA.new
+	salsa = SALSA.new
 
-	# test
-	seedPage = x.find_SeedPage()
+	# 全ページのリスト
+	$pageList = salsa.make_List()
 
-	# seedページから初期セット作成
-	InitialSet = x.make_InitialSet(seedPage)
-	
-	# 初期ベクトル定義
-	init = x.make_init()
+	# 1.Seedページの決定
+	seedPage = salsa.find_SeedPage()
 
-	# 隣接行列
-	x.make_matrix(InitialSet)
+	if($pageList.size != 0)
 
-	# 権威行列
-	x.make_ataMatrix()
-	
-	# 各スコア計算
-	aScore = x.calc_authority(init)
-	hScore = x.calc_hub(aScore)
+		# 2.seedページから初期セット作成
+		InitialSet = salsa.make_InitialSet(seedPage)
+		
+		# 初期ベクトル定義
+		init = salsa.make_init()
+
+		# 隣接行列
+		salsa.make_matrix(InitialSet)
+
+		# 権威行列
+		salsa.make_ataMatrix()
+		
+		# 3.各SALSAスコア計算
+		aScore = salsa.calc_authority(init)
+		hScore = salsa.calc_hub(aScore)
+
+		# 4.各SALSAスコア再計算
+		aNewScore = salsa.calc_NewScore(aScore,true)
+		hNewScore = salsa.calc_NewScore(hScore,false)
+
+		# 各スコアをソード
+		aScoreSort = salsa.sort_aRanking(aNewScore)
+		hScoreSort = salsa.sort_hRanking(hNewScore)	
+
+		aScoreSortOutput = aScoreSort.clone
+		hScoreSortOutput = hScoreSort.clone
+
+		# 各スコア最大値のページを抽出
+		# 6.最大スコアのページから距離1のページを追加
+		# 7.閾値を下回ったら終了
+		while true
+
+			maxAuthorityPage = salsa.find_maxAuthority(aScoreSort)
+			if(maxAuthorityPage != nil)
+				salsa.add_page(maxAuthorityPage)
+			end
+
+			maxHubPage = salsa.find_maxHub(hScoreSort)
+			if(maxHubPage != nil)
+				salsa.add_page(maxHubPage)
+			end
+
+			if(maxAuthorityPage == nil && maxHubPage == nil)
+				break
+			end
+		end
+
+	end
 
 	# 出力
 	puts "-----------------"
 	puts "SeedPage"
 	p seedPage
 
-	x.print_matrix
+	salsa.print_matrix
 
 	puts "-----------------"
 	puts "SALSA_Authority_score"
 	p aScore
 
-	x.print_aRanking(aScore)
+	puts "-----------------"
+	puts "SALSA_NewAuthority_score"
+	p aNewScore
+
+	puts "-----------------"
+	puts "authority Ranking"
+	p aScoreSortOutput
 
 	puts "-----------------"
 	puts "SALSA_Hub_score"
 	p hScore
 
-	x.print_hRanking(hScore)	
+	puts "-----------------"
+	puts "SALSA_NewHub_score"
+	p hNewScore
+
+	puts "-----------------"
+	puts "hub Ranking"
+	p hScoreSortOutput
+
+	puts "-----------------"
+	puts "cluster"
+	salsa.print_cluster
+
+	puts $pageList.size
 
 end
 

@@ -1,0 +1,4 @@
+http://go05.boo.jp/RubyTestRepository/Page1.html\t http://go05.boo.jp/RubyTestRepository/Page3.html\t http://go05.boo.jp/RubyTestRepository/Page4.html
+http://go05.boo.jp/RubyTestRepository/Page2.html\t http://go05.boo.jp/RubyTestRepository/Page3.html\t http://go05.boo.jp/RubyTestRepository/Page4.html
+http://go05.boo.jp/RubyTestRepository/Page3.html\t http://go05.boo.jp/RubyTestRepository/Page1.html\t http://go05.boo.jp/RubyTestRepository/Page2.html
+http://go05.boo.jp/RubyTestRepository/Page4.html\t http://go05.boo.jp/RubyTestRepository/Page2.html\t http://go05.boo.jp/RubyTestRepository/Page3.html

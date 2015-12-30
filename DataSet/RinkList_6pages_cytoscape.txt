@@ -1,0 +1,11 @@
+http://go05.boo.jp/RubyTestRepository/Page1.html,http://go05.boo.jp/RubyTestRepository/Page3.html
+http://go05.boo.jp/RubyTestRepository/Page1.html,http://go05.boo.jp/RubyTestRepository/Page4.html
+http://go05.boo.jp/RubyTestRepository/Page2.html,http://go05.boo.jp/RubyTestRepository/Page3.html
+http://go05.boo.jp/RubyTestRepository/Page2.html,http://go05.boo.jp/RubyTestRepository/Page4.html
+http://go05.boo.jp/RubyTestRepository/Page3.html,http://go05.boo.jp/RubyTestRepository/Page1.html
+http://go05.boo.jp/RubyTestRepository/Page3.html,http://go05.boo.jp/RubyTestRepository/Page2.html
+http://go05.boo.jp/RubyTestRepository/Page4.html,http://go05.boo.jp/RubyTestRepository/Page2.html
+http://go05.boo.jp/RubyTestRepository/Page4.html,http://go05.boo.jp/RubyTestRepository/Page3.html
+http://go05.boo.jp/RubyTestRepository/Page5.html,http://go05.boo.jp/RubyTestRepository/Page4.html
+http://go05.boo.jp/RubyTestRepository/Page5.html,http://go05.boo.jp/RubyTestRepository/Page6.html
+http://go05.boo.jp/RubyTestRepository/Page6.html,http://go05.boo.jp/RubyTestRepository/Page5.html
