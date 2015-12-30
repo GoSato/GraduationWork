@@ -7,7 +7,6 @@ class SALSA
 	def make_List
 
 		@dataSetList = Array.new # dateSet中の全ページのリスト
-		@cluster = Array.new
 
 		@file = []
 
@@ -61,7 +60,6 @@ class SALSA
 		max = counter.max { |a, b| a[1] <=> b[1] }
 
 		# リストからシードページを削除
-		#@dataSetList.delete(max[0])
 		$pageList.delete(max[0])
 		
 		return max
@@ -113,8 +111,7 @@ class SALSA
 		# 初期セットのサイズが100以下の時
 		for i in initialSetList do
 			$pageList.delete(i)
-			@cluster.push(i)
-			#$cluster.push(i)
+			eval("$cluster#{$num}").push(i)
 		end
 
 		#File.write("output1.txt",@cluster)
@@ -125,7 +122,6 @@ class SALSA
 			second_num = @file[i][1]
 				
 			list.size.times do |i|
-				#if (["#{first_num}","#{second_num}"] - @number.keys).empty?
 				if @number.include?("#{first_num}") && @number.keys.include?("#{second_num}")
 					if list[i].to_s != first_num && list[i].to_s != second_num
 				
@@ -156,14 +152,14 @@ class SALSA
 					if(@number[first_num] == nil)
 						@number[first_num] = @num
 						@num += 1
-						@cluster.push(first_num)
+						eval("$cluster#{$num}").push(first_num)
 						$pageList.delete(first_num)
 					end
 					
 					if(@number[second_num] == nil)
 						@number[second_num] = @num
 						@num += 1
-						@cluster.push(second_num)
+						eval("$cluster#{$num}").push(second_num)
 						$pageList.delete(second_num)
 					end
 
@@ -183,7 +179,7 @@ class SALSA
 	# 隣接行列作成(正規化)
 	def make_matrix(list)
 
-		@dim = @number.size #5
+		@dim = @number.size
 		@a = []
 		@outLinks = []
 		@inLinks = []
@@ -369,8 +365,13 @@ class SALSA
 	end
 
 	def print_cluster()
-		p @cluster
-		puts @cluster.size
+
+		$num.times do |i|
+			p eval("$cluster#{i}")
+			puts "clusterSize"
+			puts eval("$cluster#{i}").size
+		end
+
 		#File.write("cluster.txt",@cluster)
 	end
 	
@@ -392,8 +393,8 @@ result = Benchmark.realtime do
 			# 1.Seedページの決定
 			seedPage = salsa.find_SeedPage()
 
-			#$cluster = Array.new()
-			#eval("$cluster#{$num}") = Array.new
+			# cluster初期化
+			eval("$cluster#{$num} = Array.new") 
 
 			# 2.seedページから初期セット作成
 			InitialSet = salsa.make_InitialSet(seedPage)
@@ -442,7 +443,7 @@ result = Benchmark.realtime do
 			end
 
 			$num += 1
-			salsa.print_cluster()
+
 		else
 			break
 		end
@@ -483,6 +484,7 @@ result = Benchmark.realtime do
 	puts "cluster"
 	salsa.print_cluster
 
+	puts "pagelistSize"
 	puts $pageList.size
 
 end
