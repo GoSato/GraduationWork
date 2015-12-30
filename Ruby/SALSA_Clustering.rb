@@ -9,14 +9,22 @@ class SALSA
 		@dataSetList = Array.new # dateSet中の全ページのリスト
 		@cluster = Array.new
 
+		@file = []
+
 		i = 0
+		x = 0
 
 		File.open(ARGV[0]){|file|
 			file.each_line do |line|
+				
 				first_num,second_num = line.chomp!.split(",")
+
+				@file[x] = [first_num,second_num]
+
 				@dataSetList[i] = first_num
 				@dataSetList[i+1] = second_num
 				i += 2
+				x += 1
 			end
 		}
 
@@ -35,6 +43,7 @@ class SALSA
 
 		File.open(ARGV[0]){|file|
 			file.each_line do |line|
+				
 				first_num,second_num = line.chomp!.split(",")
 				
 				num = [first_num,second_num]
@@ -46,6 +55,7 @@ class SALSA
 						counter[num[i]] = counter[num[i]] + 1
 					end
 				end
+			
 			end
 		}
 
@@ -360,7 +370,7 @@ class SALSA
 	def print_cluster()
 		p @cluster
 		puts @cluster.size
-		File.write("cluster.txt",@cluster)
+		#File.write("cluster.txt",@cluster)
 	end
 	
 end
@@ -409,7 +419,6 @@ result = Benchmark.realtime do
 		# 6.最大スコアのページから距離1のページを追加
 		# 7.閾値を下回ったら終了
 		while true
-
 			maxAuthorityPage = salsa.find_maxAuthority(aScoreSort)
 			if(maxAuthorityPage != nil)
 				salsa.add_page(maxAuthorityPage)
