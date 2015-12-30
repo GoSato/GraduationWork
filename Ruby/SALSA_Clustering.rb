@@ -70,7 +70,8 @@ class SALSA
 	def make_InitialSet(seedPage)
 		
 		# SeedPage
-		list = [seedPage[0]]
+		list = seedPage[0]
+
 		# 初期セットの隣接行列
 		@matrix = Hash.new { |h,k| h[k] = {} }
 		# ページにつけられる番号
@@ -80,13 +81,15 @@ class SALSA
 		# 一時的に追加するようの変数
 		initialSetList = Array.new
 
+		@IsJudge = false
+
 		@file.size.times do |i|
 
 			first_num = @file[i][0]
 			second_num = @file[i][1]
 
-			list.size.times do |i|
-				if list[i].to_s == first_num || list[i].to_s == second_num
+			2.times do |j|
+				if list.to_s == first_num || list.to_s == second_num
 					
 					if(@number[first_num] == nil)
 						@number[first_num] = @num
@@ -103,9 +106,9 @@ class SALSA
 					@matrix[@number[first_num]][@number[second_num]] = 1
 
 					break
+
 				end
-			end
-			
+			end			
 		end
 
 		# 初期セットのサイズが100以下の時
@@ -319,6 +322,8 @@ class SALSA
 		# puts "-----------------"
 		# puts "matrix"
 		# p @a
+
+
 	end
 
 	# 下の2つは1つにまとめる
@@ -364,6 +369,21 @@ class SALSA
 		end
 	end
 
+	def make_newFile()
+
+		@file.size.times do |i|
+			@file[i] -= eval("$cluster#{$num}")
+			puts "file[i]"
+			puts @file[i]
+		end
+
+		puts "cluster0"
+		puts eval("$cluster#{$num}")
+		
+		puts "------"
+		puts @file.size
+	end
+
 	def print_cluster()
 
 		$num.times do |i|
@@ -372,7 +392,6 @@ class SALSA
 			puts eval("$cluster#{i}").size
 		end
 
-		#File.write("cluster.txt",@cluster)
 	end
 	
 end
@@ -442,6 +461,7 @@ result = Benchmark.realtime do
 				end
 			end
 
+			#salsa.make_newFile()
 			$num += 1
 
 		else
