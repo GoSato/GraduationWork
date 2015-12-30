@@ -3,7 +3,6 @@ require 'matrix'
 
 class SALSA
 
-
 	def make_List
 
 		@dataSetList = Array.new # dateSet中の全ページのリスト
@@ -39,11 +38,12 @@ class SALSA
 
 		# ページ数カウント用
 		counter = Hash.new
+		count = 0
 
-		@file.size.times do |i|
+		@file.each do |i|
 				
-			first_num = @file[i][0]
-			second_num = @file[i][1]
+			first_num = @file[count][0]
+			second_num = @file[count][1]
 			
 			num = [first_num,second_num]
 
@@ -54,6 +54,8 @@ class SALSA
 					counter[num[j]] = counter[num[j]] + 1
 				end
 			end
+
+			count += 1
 		end
 
 		# 入出リンク数が最大のものを取り出す
@@ -71,7 +73,6 @@ class SALSA
 		
 		# SeedPage
 		list = seedPage[0]
-
 		# 初期セットの隣接行列
 		@matrix = Hash.new { |h,k| h[k] = {} }
 		# ページにつけられる番号
@@ -193,7 +194,6 @@ class SALSA
 			@dim.times do |j|
 				if(list[i][j] != nil) 
 					#値に対して出リンク数で割る
-					#例 [0,0,1/2,1/2]
 					@a[i][j] = list[i][j] * 1.0 / list[i].count * 1.0
 				else
 					@a[i][j] = 0	
@@ -322,7 +322,6 @@ class SALSA
 		# puts "-----------------"
 		# puts "matrix"
 		# p @a
-
 
 	end
 
