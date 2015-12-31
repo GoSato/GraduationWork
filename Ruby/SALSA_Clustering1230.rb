@@ -4,7 +4,6 @@ require 'matrix'
 class SALSA
 
 	def make_List
-		puts "make_List"
 
 		@dataSetList = Array.new # dateSet中の全ページのリスト
 
@@ -27,13 +26,15 @@ class SALSA
 			end
 		}
 
-		return @file.size
+		@dataSetList = @dataSetList.uniq
+
+		# 全ページのリストを返す
+		return @dataSetList
 		
 	end
 
 	# 入出リンク数が最大のものをSeedPageに
 	def find_SeedPage
-		puts "find_SeedPage"
 
 		# ページ数カウント用
 		counter = Hash.new
@@ -54,13 +55,15 @@ class SALSA
 
 		# 入出リンク数が最大のものを取り出す
 		max = counter.max { |a, b| a[1] <=> b[1] }
+
+		# リストからシードページを削除
+		$pageList.delete(max[0])
 		
 		return max	
 	end
 	
 	# seedページから初期セットの作成
 	def make_InitialSet(seedPage)
-		puts "make_InitialSet"
 		
 		# SeedPageの番号
 		list = seedPage[0]
@@ -72,85 +75,60 @@ class SALSA
 		@num = 0	
 		# 一時的に追加するようの変数
 		initialSetList = Array.new
-		@addList = Array.new
 
-		count = -1
+		@IsJudge = false
 
-		isHit = false
+		@file.size.times do |i|
 
-		@file.reverse_each do |num|
+			first_num = @file[i][0]
+			second_num = @file[i][1]
 
-			first_num = num[0]
-			second_num = num[1]
-
-			num.each do |i|
+			2.times do |j|
 				if list.to_s == first_num || list.to_s == second_num
 					
 					if(@number[first_num] == nil)
 						@number[first_num] = @num
 						@num += 1
 						initialSetList.push(first_num)
-						isHit = true
 					end
 					
 					if(@number[second_num] == nil)
 						@number[second_num] = @num
 						@num += 1
 						initialSetList.push(second_num)
-						isHit = true
 					end
 
 					@matrix[@number[first_num]][@number[second_num]] = 1
-					
+
 					break
+
 				end
-			end	
-
-			# ここでseedとリンク関係にある行を消去
-			if(isHit)
-				#@file.delete(num)
-				@file.delete_at(count)
-				isHit = false
-			else
-				count -= 1
-			end		
-
+			end			
 		end
 
 		# 初期セットのサイズが100以下の時
 		for i in initialSetList do
-			#$pageList.delete(i)
+			$pageList.delete(i)
 			eval("$cluster#{$num}").push(i)
 		end
 
 		#File.write("output1.txt",@cluster)
 
-		count = -1
+		@file.size.times do |i|
 
-		@file.reverse_each do |num|
-
-			first_num = num[0]
-			second_num = num[1]
+			first_num = @file[i][0]
+			second_num = @file[i][1]
 				
-			num.each do |i|
+			list.size.times do |i|
 				if @number.include?("#{first_num}") && @number.keys.include?("#{second_num}")
-					if i[0].to_s != first_num && i[1].to_s != second_num
+					if list[i].to_s != first_num && list[i].to_s != second_num
 				
 						@matrix[@number[first_num]][@number[second_num]] = 1
-						isHit = true
 
 						break
 					end
 				end
 			end
-
-			if(isHit)
-				#@file.delete(num)
-				@file.delete_at(count)
-				isHit = false
-			else
-				count -= 1
-			end	
 		end
 
 		return @matrix
@@ -158,73 +136,46 @@ class SALSA
 	end
 
 	def add_page(page)
-		puts "add_page"
 
 		list = [page]
-		isHit = false
-		count = -1
 
-		@file.reverse_each do |num|
+		@file.size.times do |i|
 
-			first_num = num[0]
-			second_num = num[1]
+			first_num = @file[i][0]
+			second_num = @file[i][1]
 
-			if list[0].to_s == first_num || list[0].to_s == second_num
-				
-				if(@number[first_num] == nil)
-					@number[first_num] = @num
-					@num += 1
-					eval("$cluster#{$num}").push(first_num)
-					@addList.push(first_num)
-					isHit = true
-				end
-				
-				if(@number[second_num] == nil)
-					@number[second_num] = @num
-					@num += 1
-					eval("$cluster#{$num}").push(second_num)
-					@addList.push(second_num)
-					isHit = true
-				end
+			list.size.times do |i|
+				if list[i].to_s == first_num || list[i].to_s == second_num
+					
+					if(@number[first_num] == nil)
+						@number[first_num] = @num
+						@num += 1
+						eval("$cluster#{$num}").push(first_num)
+						$pageList.delete(first_num)
+					end
+					
+					if(@number[second_num] == nil)
+						@number[second_num] = @num
+						@num += 1
+						eval("$cluster#{$num}").push(second_num)
+						$pageList.delete(second_num)
+					end
 
-			end
-
-			if(isHit)
-				#@file.delete(num)
-				@file.delete_at(count)
-				isHit = false
-			else
-				count -= 1
-			end	
-
-		end
-
-		# スコアの高いページとリンク関係にある行を消去
-		@file.reverse_each do |num|
-
-			first_num = num[0]
-			second_num = num[1]
-
-			@addList.each do |i|
-
-				if i == first_num || i == second_num					
-					@file.delete(num)
+					#@matrix[@number[first_num]][@number[second_num]] = 1
+					#break
 				end
 			end
 		end
 
-		$size = @file.size
 	end
 
 	# 初期ベクトル作成
 	def make_init
-		puts "make_init"
 		Array.new(@number.size,1) #[1,1,1,1,1]
 	end
 
 	# 隣接行列作成(正規化)
 	def make_matrix(list)
-		puts "make_matrix"
 
 		@dim = @number.size
 		@a = []
@@ -259,12 +210,27 @@ class SALSA
 			@inLinks[i] = inCount
 		end
 
+		#puts @outLinks
+		#puts @inLinks
 	end
 
 	# 権威行列作成
 	def make_ataMatrix
 
 		@ata = Array.new(@dim){Array.new(@dim,0)}
+
+		# @dim.times do |i|
+		# 	if @listTranspose[i].inject(:+) != 0 
+		# 		@dim.times do |j|
+				
+		# 				@ata[i][j] = (Vector.elements(@listTranspose[i]).inner_product(Vector.elements(@listTranspose[j])))
+
+		# 		end
+		# 	else
+		# 		@ata[i].fill(0)
+
+		# 	end
+		# end
 
 		@dim.times do |i|
 			if @listTranspose[i].inject(:+) != 0 
@@ -385,7 +351,7 @@ class SALSA
 	end
 
 	def find_maxHub(sortScore)
-
+		
 		maxHub = sortScore.max { |a, b| a[1] <=> b[1] }
 		sortScore.shift
 
@@ -396,17 +362,31 @@ class SALSA
 		end
 	end
 
+	def make_newFile()
+
+		@file.size.times do |i|
+			@file[i] -= eval("$cluster#{$num}")
+			puts "file[i]"
+			puts @file[i]
+		end
+
+		puts "cluster0"
+		puts eval("$cluster#{$num}")
+		
+		puts "------"
+		puts @file.size
+	end
+
 	def print_cluster()
 
 		$num.times do |i|
-			puts "-----------------"
-			puts "cluster#{i}"
-			#File.write(fileName,eval("$cluster#{i}"))
 			p eval("$cluster#{i}")
 			puts "clusterSize"
 			puts eval("$cluster#{i}").size
 		end
-	end	
+
+	end
+	
 end
 
 result = Benchmark.realtime do
@@ -415,12 +395,13 @@ result = Benchmark.realtime do
 	salsa = SALSA.new
 
 	# 全ページのリスト
-	$size = salsa.make_List()
+	$pageList = salsa.make_List()
 
 	$num = 0
 
-	while  true
-		if($size != 0)
+	#while  true
+		if($pageList.size != 0)
+		
 			# 1.Seedページの決定
 			seedPage = salsa.find_SeedPage()
 
@@ -428,13 +409,13 @@ result = Benchmark.realtime do
 			eval("$cluster#{$num} = Array.new") 
 
 			# 2.seedページから初期セット作成
-			initialSet = salsa.make_InitialSet(seedPage)
+			InitialSet = salsa.make_InitialSet(seedPage)
 			
 			# 初期ベクトル定義
 			init = salsa.make_init()
 
 			# 隣接行列
-			salsa.make_matrix(initialSet)
+			salsa.make_matrix(InitialSet)
 
 			# 権威行列
 			salsa.make_ataMatrix()
@@ -473,12 +454,13 @@ result = Benchmark.realtime do
 				end
 			end
 
+			#salsa.make_newFile()
 			$num += 1
 
 		else
 			break
 		end
-	end
+	#end
 
 	# 出力
 	puts "-----------------"
@@ -511,9 +493,12 @@ result = Benchmark.realtime do
 	puts "hub Ranking"
 	p hScoreSortOutput
 
-	#puts "-----------------"
-	#puts "cluster"
+	puts "-----------------"
+	puts "cluster"
 	salsa.print_cluster
+
+	puts "pagelistSize"
+	puts $pageList.size
 
 end
 
