@@ -199,17 +199,27 @@ class SALSA
 
 		end
 
-		# スコアの高いページとリンク関係にある行を消去
+		count = -1
+
+		#スコアの高いページとリンク関係にある行を消去
 		@file.reverse_each do |num|
 
 			first_num = num[0]
-			second_num = num[1]
+			second_num = num[1]		
 
-			@addList.each do |i|
+			@addList.reverse_each do |i|	
 
 				if i == first_num || i == second_num					
-					@file.delete(num)
+					@file.delete_at(count)
+					isHit = true
+					break
 				end
+			end
+
+			if(isHit)
+				isHit = false
+			else
+				count -= 1
 			end
 		end
 
