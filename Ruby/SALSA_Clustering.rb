@@ -1,10 +1,11 @@
 require 'benchmark'
 require 'matrix'
+require_relative './calcFinalScore.rb'
 
 class SALSA
 
 	def make_List
-		puts "make_List"
+		#puts "make_List"
 
 		@dataSetList = Array.new # dateSet中の全ページのリスト
 
@@ -33,7 +34,7 @@ class SALSA
 
 	# 入出リンク数が最大のものをSeedPageに
 	def find_SeedPage
-		puts "find_SeedPage"
+		#puts "find_SeedPage"
 
 		# ページ数カウント用
 		counter = Hash.new
@@ -60,7 +61,7 @@ class SALSA
 	
 	# seedページから初期セットの作成
 	def make_InitialSet(seedPage)
-		puts "make_InitialSet"
+		#puts "make_InitialSet"
 		
 		# SeedPageの番号
 		list = seedPage[0]
@@ -72,7 +73,7 @@ class SALSA
 		@num = 0	
 		# 一時的に追加するようの変数
 		initialSetList = Array.new
-		@addList = Array.new
+		#@addList = Array.new
 
 		count = -1
 
@@ -119,7 +120,6 @@ class SALSA
 
 		# 初期セットのサイズが100以下の時
 		for i in initialSetList do
-			#$pageList.delete(i)
 			eval("$cluster#{$num}").push(i)
 		end
 
@@ -158,11 +158,12 @@ class SALSA
 	end
 
 	def add_page(page)
-		puts "add_page"
+		#puts "add_page"
 
 		list = [page]
 		isHit = false
 		count = -1
+		@addList = Array.new
 
 		@file.reverse_each do |num|
 
@@ -187,6 +188,8 @@ class SALSA
 					isHit = true
 				end
 
+				@matrix[@number[first_num]][@number[second_num]] = 1
+
 			end
 
 			if(isHit)
@@ -200,6 +203,26 @@ class SALSA
 		end
 
 		count = -1
+
+		@file.reverse_each do |num|
+
+			first_num = num[0]
+			second_num = num[1]
+				
+			num.each do |i|
+				if @number.include?("#{first_num}") && @number.keys.include?("#{second_num}")
+					if i[0].to_s != first_num && i[1].to_s != second_num
+				
+						@matrix[@number[first_num]][@number[second_num]] = 1
+
+						break
+					end
+				end
+			end
+		end
+
+		puts "matrix"
+		puts @matrix
 
 		#スコアの高いページとリンク関係にある行を消去
 		@file.reverse_each do |num|
@@ -226,47 +249,71 @@ class SALSA
 		$size = @file.size
 	end
 
+	def return_matrix
+		return @matrix
+	end
+
 	# 初期ベクトル作成
 	def make_init
-		puts "make_init"
+		#puts "make_init"
 		Array.new(@number.size,1) #[1,1,1,1,1]
 	end
 
 	# 隣接行列作成(正規化)
 	def make_matrix(list)
-		puts "make_matrix"
+		#puts "make_matrix"
 
 		@dim = @number.size
 		@a = []
+		@lr = []
+		@lc = []
+
 		@outLinks = []
 		@inLinks = []
 
 		@dim.times do |i|
-			#ランダム遷移行列を各出リンク数で割った値を格納
-			@a[i] = [] # p[0],p[1],p[2],p[3]
+			@a[i] = []
+			@lr[i] = []
 			@dim.times do |j|
 				if(list[i][j] != nil) 
-					#値に対して出リンク数で割る
-					@a[i][j] = list[i][j] * 1.0 / list[i].count * 1.0
+					@a[i][j] = list[i][j] * 1.0
+					@lr[i][j] = list[i][j] * 1.0 /list[i].count * 1.0
 				else
 					@a[i][j] = 0	
+					@lr[i][j] = 0
 				end
 			end
 			@outLinks[i] = list[i].count
 		end
 
-		@listTranspose = @a.transpose
+		# 権威スコア計算用の転置行列作成
+		@lrt = @lr.transpose
 
+		# 入リンク数をカウント
 		@dim.times do |i|
 
 			inCount = 0
 
 			@dim.times do |j|
-				if(@listTranspose[i][j] != 0)
+				if(@lrt[i][j] != 0)
 					inCount += 1
 				end
 			end
 			@inLinks[i] = inCount
+		end
+
+		# 正規化
+		@dim.times do |i|
+			@lc[i] = []
+			@dim.times do |j|
+					if(@inLinks[j] != 0)
+						@lc[i][j] = @a[i][j] / @inLinks[j]
+					end
+					
+					if(@lc[i][j] == nil)
+						@lc[i][j] = 0
+					end
+			end
 		end
 
 	end
@@ -289,26 +336,62 @@ class SALSA
 		end
 	end
 
+	def make_initialAuthorityScore(init)
+		
+		@initialAuthorityScore = []
+		@initialHubScore = init
+		sum = 0
+		
+		@dim.times do |i|
+			@initialAuthorityScore[i] = 0
+			@dim.times do |j|
+				if(@lrt[i][j] != 0)
+					@initialAuthorityScore[i] += @lrt[i][j] * @initialHubScore[j]
+				end
+			end
+			sum += @initialAuthorityScore[i]
+		end
+
+		@dim.times do |k|
+			@initialAuthorityScore[k] = @initialAuthorityScore[k] / sum
+		end
+
+		return @initialAuthorityScore
+
+	end
+
 	# 権威スコア計算
 	def calc_authority(curr)
+
 		15.times do #試験的に15回
 			prev = curr.clone
 			sum = 0
 			line = []
+			@authorityScore = []
 
+			# A = Lc * x(k-1)
 			@dim.times do |i|
 				line[i] = 0
 				@dim.times do |j|
-					line[i] += @ata[i][j] * prev[j]
+					line[i] += @lc[i][j] * prev[j]
 				end
-				sum += line[i]
-				curr[i] = line[i]
+			end
 
+			# LrT * A
+			@dim.times do |i|
+				@authorityScore[i] = 0
+				@dim.times do |j|
+					@authorityScore[i] += @lrt[i][j] * line[j]
+				end
+				sum += @authorityScore[i]
 			end
 			
+			# 正規化
 			@dim.times do |k|
-				curr[k] = (curr[k] / sum)
+				@authorityScore[k] = (@authorityScore[k] / sum)
 			end
+
+			curr = @authorityScore
 
 		end
 
@@ -317,12 +400,17 @@ class SALSA
 
 	# ハブスコア計算
 	def calc_hub(matrix)
+
 		sum = 0
 		line = []
+		
 		@dim.times do |i|
 			line[i] = 0
 			@dim.times do |j|
-				line[i] += @a[i][j] * matrix[j]
+				if(@inLinks[j] != 0)
+					line[i] += @lc[i][j] * matrix[j]
+				end
+
 			end
 			sum += line[i]
 		end
@@ -330,6 +418,7 @@ class SALSA
 		@dim.times do |k|
 			line[k] = (line[k] / sum)
 		end
+
 		return line
 	end
 
@@ -374,14 +463,16 @@ class SALSA
 	end
 
 	def find_maxAuthority(sortScore)
-
+		
 		maxAuthority = sortScore.max { |a, b| a[1] <=> b[1] }
 		sortScore.shift
 
-		if(maxAuthority[1] > 0.01)
-			return maxAuthority[0]
-		else
-			return nil
+		if(maxAuthority != nil)
+			if(maxAuthority[1] > 0.01)
+				return maxAuthority[0]
+			else
+				return nil
+			end
 		end
 	end
 
@@ -399,10 +490,12 @@ class SALSA
 		maxHub = sortScore.max { |a, b| a[1] <=> b[1] }
 		sortScore.shift
 
-		if(maxHub[1] > 0.01)
-			return maxHub[0]
-		else
-			return nil
+		if(maxHub != nil)
+			if(maxHub[1] > 0.01)
+				return maxHub[0]
+			else
+				return nil
+			end
 		end
 	end
 
@@ -447,27 +540,32 @@ result = Benchmark.realtime do
 			salsa.make_matrix(initialSet)
 
 			# 権威行列
-			salsa.make_ataMatrix()
+			#salsa.make_ataMatrix()
+
+			# 初期ハブスコア作成
+			initialAuth = salsa.make_initialAuthorityScore(init)
 			
 			# 3.各SALSAスコア計算
-			aScore = salsa.calc_authority(init)
+			aScore = salsa.calc_authority(initialAuth)
 			hScore = salsa.calc_hub(aScore)
 
 			# 4.各SALSAスコア再計算
 			aNewScore = salsa.calc_NewScore(aScore,true)
 			hNewScore = salsa.calc_NewScore(hScore,false)
 
-			# 各スコアをソード
+			# 各スコアをソート
 			aScoreSort = salsa.sort_aRanking(aNewScore)
 			hScoreSort = salsa.sort_hRanking(hNewScore)	
 
-			aScoreSortOutput = aScoreSort.clone
-			hScoreSortOutput = hScoreSort.clone
+			# 近似値作成用
+			eval("@aScoreSortOutput#{$num} = aScoreSort.clone")
+			eval("@hScoreSortOutput#{$num} = hScoreSort.clone")
 
 			# 各スコア最大値のページを抽出
 			# 6.最大スコアのページから距離1のページを追加
 			# 7.閾値を下回ったら終了
 			while true
+				# スコア最大のページを取得
 				maxAuthorityPage = salsa.find_maxAuthority(aScoreSort)
 				if(maxAuthorityPage != nil)
 					salsa.add_page(maxAuthorityPage)
@@ -479,6 +577,12 @@ result = Benchmark.realtime do
 				end
 
 				if(maxAuthorityPage == nil && maxHubPage == nil)
+					test = salsa.return_matrix
+					salsa.make_matrix(test)
+					init = salsa.make_init()
+					initialAuth = salsa.make_initialAuthorityScore(init)
+					puts "newAuth"
+					p initialAuth
 					break
 				end
 			end
@@ -490,40 +594,45 @@ result = Benchmark.realtime do
 		end
 	end
 
+	# 近似値の計算
+	calcfinalscore()
+
+	salsa.print_cluster
+
 	# 出力
-	puts "-----------------"
-	puts "SeedPage"
-	p seedPage
+	# puts "-----------------"
+	# puts "SeedPage"
+	# p seedPage
 
-	salsa.print_matrix
+	# salsa.print_matrix
 
-	puts "-----------------"
-	puts "SALSA_Authority_score"
-	p aScore
+	# puts "-----------------"
+	# puts "SALSA_Authority_score"
+	# p aScore
 
-	puts "-----------------"
-	puts "SALSA_NewAuthority_score"
-	p aNewScore
+	# puts "-----------------"
+	# puts "SALSA_NewAuthority_score"
+	# p aNewScore
 
 	puts "-----------------"
 	puts "authority Ranking"
-	p aScoreSortOutput
+	p @aScoreSortOutput1
 
-	puts "-----------------"
-	puts "SALSA_Hub_score"
-	p hScore
+	# puts "-----------------"
+	# puts "SALSA_Hub_score"
+	# p hScore
 
-	puts "-----------------"
-	puts "SALSA_NewHub_score"
-	p hNewScore
+	# puts "-----------------"
+	# puts "SALSA_NewHub_score"
+	# p hNewScore
 
-	puts "-----------------"
-	puts "hub Ranking"
-	p hScoreSortOutput
+	# puts "-----------------"
+	# puts "hub Ranking"
+	# p hScoreSortOutput
 
 	#puts "-----------------"
 	#puts "cluster"
-	salsa.print_cluster
+	
 
 end
 

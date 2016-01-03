@@ -1,4 +1,5 @@
 require 'benchmark'
+require 'matrix'
 
 class SALSA
 	
@@ -6,11 +7,10 @@ class SALSA
 	def extraction
 
 		# rootset
-		#list = [11,636,4094,5795,6936,8411,9940,4980,7868,8544,6322]
-		# list = [9,4980,11,636,4094,5795,6936,76,9940,8411,645,1574,2091,5505,5244,8544,7868,6322,7097,6514]
-		#list = [554,1547,1546,1023,1339,1636,2499,3169,3342,3343,3344,3345,3346,2392,3382]
-		#list = [1547,554]
-		list = [1,6]
+		
+		list = [554,1547,1546,1023,1339,1636,2499,3169,3342,3343,3344,3345,3346,2392,3382]
+		#list = [1547]
+		#list = [1,9,3,31,33,34]
 
 		# basesetでの隣接行列
 		matrix = Hash.new { |h,k| h[k] = {} }
@@ -21,7 +21,9 @@ class SALSA
 
 		File.open(ARGV[0]){|file| 
 			file.each_line do |line|
+				
 				first_num,second_num = line.chomp!.split(",")
+				
 				list.size.times do |i|
 					if list[i].to_s == first_num || list[i].to_s == second_num
 						
@@ -46,7 +48,9 @@ class SALSA
 		File.open(ARGV[0]){|file| 
 
 			file.each_line do |line|
+				
 				first_num,second_num = line.chomp!.split(",")
+				
 				list.size.times do |i|
 					if @number.keys.include?("#{first_num}") && @number.keys.include?("#{second_num}")
 						if list[i].to_s != first_num && list[i].to_s != second_num
@@ -72,20 +76,54 @@ class SALSA
 
 	# 隣接行列作成(正規化)
 	def make_matrix(list)
-		@dim = @number.size #5
-		@a = []
+
+		@dim = @number.size 
+		@a = [] #隣接行列
+		@lr = [] #出リンク数で正規化
+		@lc = [] #入リンク数で正規化
+		@inLinks = []
 
 		@dim.times do |i|
-			#ランダム遷移行列を各出リンク数で割った値を格納
-			@a[i] = [] # p[0],p[1],p[2],p[3]
+			@a[i] = []
+			@lr[i] = []
 			@dim.times do |j|
 				if(list[i][j] != nil) 
-					#値に対して出リンク数で割る
-					#例 [0,0,1/2,1/2]
-					@a[i][j] = list[i][j] * 1.0 / list[i].count * 1.0
+					@a[i][j] = list[i][j] * 1.0
+					@lr[i][j] = list[i][j] * 1.0 /list[i].count * 1.0
 				else
 					@a[i][j] = 0	
+					@lr[i][j] = 0
 				end
+			end
+		end
+
+		# 権威スコア計算用の転置行列作成
+		@lrt = @lr.transpose
+
+		# 入リンク数をカウント
+		@dim.times do |i|
+
+			inCount = 0
+
+			@dim.times do |j|
+				if(@lrt[i][j] != 0)
+					inCount += 1
+				end
+			end
+			@inLinks[i] = inCount
+		end
+
+		# 正規化
+		@dim.times do |i|
+			@lc[i] = []
+			@dim.times do |j|
+					if(@inLinks[j] != 0)
+						@lc[i][j] = @a[i][j] / @inLinks[j]
+					end
+					
+					if(@lc[i][j] == nil)
+						@lc[i][j] = 0
+					end
 			end
 		end
 
@@ -93,51 +131,100 @@ class SALSA
 
 	# 権威行列作成
 	def make_ataMatrix
+
 		@ata = Array.new(@dim){Array.new(@dim,0)}
 
 		@dim.times do |i|
-			@dim.times do |j|
-				@dim.times do |k|
-					@ata[i][j] += @a.transpose[i][k] * @a[k][j]
+			if @lrt[i].inject(:+) != 0 
+				@dim.times do |j|
+					if @lc[j].inject(:+) != 0 
+						@dim.times do |k|
+							if(@inLinks[k] != 0)
+								#@ata[i][j] += @listTranspose[i][k] * @listTranspose[j][k]
+								@ata[i][j] += @lrt[i][k] * @lc[j][k]
+							end
+						end
+					end
 				end
-				k = 0
 			end
 		end
 	end
 
+	def make_initialAuthorityScore(init)
+		
+		@initialAuthorityScore = []
+		@initialHubScore = init
+		sum = 0
+		
+		@dim.times do |i|
+			@initialAuthorityScore[i] = 0
+			@dim.times do |j|
+				if(@lrt[i][j] != 0)
+					@initialAuthorityScore[i] += @lrt[i][j] * @initialHubScore[j]
+				end
+			end
+			sum += @initialAuthorityScore[i]
+		end
+
+		@dim.times do |k|
+			@initialAuthorityScore[k] = @initialAuthorityScore[k] / sum
+		end
+
+		return @initialAuthorityScore
+
+	end
+
 	# 権威スコア計算
 	def calc_authority(curr)
-		2.times do #試験的に15回
+		
+		15.times do #試験的に15回
 			prev = curr.clone
 			sum = 0
 			line = []
+			@authorityScore = []
 
+			# A = Lc * x(k-1)
 			@dim.times do |i|
 				line[i] = 0
 				@dim.times do |j|
-					line[i] += @ata[i][j] * prev[j]
+					line[i] += @lc[i][j] * prev[j]
 				end
-				sum += line[i]
-				curr[i] = line[i]
+			end
 
+			# LrT * A
+			@dim.times do |i|
+				@authorityScore[i] = 0
+				@dim.times do |j|
+					@authorityScore[i] += @lrt[i][j] * line[j]
+				end
+				sum += @authorityScore[i]
 			end
 			
+			# 正規化
 			@dim.times do |k|
-				curr[k] = (curr[k] / sum)
+				@authorityScore[k] = (@authorityScore[k] / sum)
 			end
 
+			curr = @authorityScore
+
 		end
+
 		return curr
 	end
 
 	# ハブスコア計算
 	def calc_hub(matrix)
+
 		sum = 0
 		line = []
+		
 		@dim.times do |i|
 			line[i] = 0
 			@dim.times do |j|
-				line[i] += @a[i][j] * matrix[j]
+				if(@inLinks[j] != 0)
+					line[i] += @lc[i][j] * matrix[j]
+				end
+
 			end
 			sum += line[i]
 		end
@@ -145,7 +232,8 @@ class SALSA
 		@dim.times do |k|
 			line[k] = (line[k] / sum)
 		end
-		return(line)
+
+		return line
 	end
 
 	def print_matrix
@@ -153,9 +241,9 @@ class SALSA
 		puts "list"
 		puts @number
 
-		puts "-----------------"
-		puts "matrix"
-		p @a
+		# puts "-----------------"
+		# puts "matrix"
+		# p @a
 	end
 
 	# 下の2つは1つにまとめる
@@ -194,11 +282,15 @@ result = Benchmark.realtime do
 
 	# 隣接行列
 	x.make_matrix(extractionList)
-	# 権威行列
-	x.make_ataMatrix()
+	
+
+	# # 権威行列
+	# x.make_ataMatrix()
+
+	initialAuth = x.make_initialAuthorityScore(init)
 	
 	# 各スコア計算
-	aScore = x.calc_authority(init)
+	aScore = x.calc_authority(initialAuth)
 	hScore = x.calc_hub(aScore)
 
 	# 出力
