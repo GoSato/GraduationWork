@@ -8,9 +8,11 @@ class SALSA
 
 		# rootset
 		
-		list = [554,1547,1546,1023,1339,1636,2499,3169,3342,3343,3344,3345,3346,2392,3382]
-		#list = [1547]
-		#list = [1,9,3,31,33,34]
+		#list = [196,2143,494,1068,1402,1545,2165,2166,2215,2646,3889,3890,3312] 
+		#list = [192,196,246,424,659,809,2120,2142,2143,2144,2145,2146,211,494,2165,2166,247,1068,252,2215,335,489,658,892,924,1372,1787,2475,2476,2477]
+		#list = [34]
+		#list = [17,29]
+		list = [192,196,246,424,659,809,2120,2142,2143,2144,2145,2146,211,494,2165,2166,247,1068,252,2215,335,489,658,892,924,1372,1787,2475,2476,2477]
 
 		# basesetでの隣接行列
 		matrix = Hash.new { |h,k| h[k] = {} }
@@ -239,7 +241,9 @@ class SALSA
 	def print_matrix
 		puts "-----------------"
 		puts "list"
-		puts @number
+		p @number.keys
+		puts "list size"
+		puts @number.size
 
 		# puts "-----------------"
 		# puts "matrix"
@@ -254,7 +258,12 @@ class SALSA
 		end
 		puts "-----------------"
 		puts "authority Ranking"
-		p aRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+		puts "-----------------"
+		#p aRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+		aRank = aRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+		100.times do |j|
+			p aRank[j][0].to_i
+		end
 	end
 
 	def print_hRanking(score)
@@ -264,7 +273,12 @@ class SALSA
 		end
 		puts "-----------------"
 		puts "hub Ranking"
-		p hRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+		puts "-----------------"
+		#p hRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+		hRank = hRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+		100.times do |j|
+			p hRank[j][0].to_i
+		end
 	end
 	
 end
@@ -283,7 +297,6 @@ result = Benchmark.realtime do
 	# 隣接行列
 	x.make_matrix(extractionList)
 	
-
 	# # 権威行列
 	# x.make_ataMatrix()
 
@@ -300,12 +313,11 @@ result = Benchmark.realtime do
 	puts "SALSA_Authority_score"
 	p aScore
 
-	x.print_aRanking(aScore)
-
 	puts "-----------------"
 	puts "SALSA_Hub_score"
 	p hScore
 
+	x.print_aRanking(aScore)
 	x.print_hRanking(hScore)	
 
 end

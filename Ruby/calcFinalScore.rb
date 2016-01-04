@@ -4,8 +4,9 @@ def calcfinalscore
 		puts "-----------------"
 		puts "calFinalScore"
 
-		queryPage = [3,9,7]
+		queryPage = [192,196,246,424,659,809,2120,2142,2143,2144,2145,2146,211,494,2165,2166,247,1068,252,2215,335,489,658,892,924,1372,1787,2475,2476,2477]
 		#queryPage = [554,1547,1546,1023,1339,1636,2499,3169,3342,3343,3344,3345,3346,2392,3382]
+
 
 		# クラスター毎にクエリページをいくつ含むか
 		counter = []
@@ -15,8 +16,12 @@ def calcfinalscore
 		@finalAuthorityScore = Hash.new
 		@finalHubScore = Hash.new
 
+		newAutoritySocre = Hash.new
+		newHubSocre = Hash.new
+
 		$num.times do |clusterNum|
 	
+			# クラスタ番号ごとにクエリページがいくつでてくるか計算
 			count = 0
 			queryPage.each do |num|
 				eval("@aScoreSortOutput#{clusterNum}").each do |i|
@@ -31,7 +36,11 @@ def calcfinalscore
 			counter[clusterNum] = count
 
 			# 重みを計算
-			w[clusterNum] = counter[clusterNum] * 1.0 / (queryPage.size * eval("@aScoreSortOutput#{clusterNum}").size * 1.0)
+			if(counter[clusterNum] != 0)
+				w[clusterNum] = counter[clusterNum] * 1.0 / (queryPage.size * eval("@aScoreSortOutput#{clusterNum}").size * 1.0)
+			else
+				w[clusterNum] = 0
+			end
 	
 		end
 
@@ -42,16 +51,32 @@ def calcfinalscore
 		puts "average"
 		puts average
 
+		# w.size.times do |i|
+		# 	if w[i] > 0
+		# 		eval("@aScoreSortOutput#{i}").each do |j|
+		# 			newSocre = j[1].to_f * w[i]
+		# 			@finalAuthorityScore[j[0]] = @finalAuthorityScore[j[1]].to_f + newSocre
+		# 			puts "@finalAuthorityScore[33]"
+		# 			puts @finalAuthorityScore["33"] 
+		# 		end
+
+		# 		eval("@hScoreSortOutput#{i}").each do |j|
+		# 			newSocre = j[1].to_f * w[i]
+		# 			@finalHubScore[j[0]] =  @finalHubScore[j[1]].to_f + newSocre
+		# 		end
+		# 	end
+		# end
+
 		w.size.times do |i|
-			if w[i] > 0
+			if w[i] > average
 				eval("@aScoreSortOutput#{i}").each do |j|
-					newSocre = j[1].to_f * w[i]
-					@finalAuthorityScore[j[0]] = newSocre
+					newAutoritySocre[j[0]] =  j[1].to_f * w[i]
+					@finalAuthorityScore[j[0]] = @finalAuthorityScore[j[0]].to_f + newAutoritySocre[j[0]].to_f
 				end
 
 				eval("@hScoreSortOutput#{i}").each do |j|
-					newSocre = j[1].to_f * w[i]
-					@finalHubScore[j[0]] = newSocre
+					newHubSocre[j[0]] = j[1].to_f * w[i]
+					@finalHubScore[j[0]] =  @finalHubScore[j[0]].to_f + newHubSocre[j[0]].to_f
 				end
 			end
 		end
@@ -59,12 +84,20 @@ def calcfinalscore
 		puts "-----------------"
 		puts "finalAuthorityScore"
 		#p @finalAuthorityScore
-		p @finalAuthorityScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }	
+		#p @finalAuthorityScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }	
+		@finalAuthorityScore = @finalAuthorityScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+		100.times do |i|
+			p @finalAuthorityScore[i][0].to_i
+		end
 
 		puts "-----------------"
 		puts "finalHubScore"
 		#p @finalHubScore
-		p @finalHubScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }	
+		#p @finalHubScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }	
+		@finalHubScore = @finalHubScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+		100.times do |i|
+			p @finalHubScore[i][0].to_i
+		end
 
 		puts "-----------------"
 		puts "clusterSize"
