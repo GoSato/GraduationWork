@@ -4,8 +4,6 @@ require_relative './calcFinalScore.rb'
 
 class SALSA
 
-	$threshold = 0.1
-
 	def make_List
 		#puts "make_List"
 
@@ -78,6 +76,8 @@ class SALSA
 
 		isHit = false
 
+		@linkCount = 0
+
 		@file.reverse_each do |num|
 
 			first_num = num[0]
@@ -110,6 +110,7 @@ class SALSA
 			if(isHit)
 				#@file.delete(num)
 				@file.delete_at(count)
+				@linkCount += 1
 				isHit = false
 			else
 				count -= 1
@@ -152,6 +153,7 @@ class SALSA
 			if(isHit)
 				#@file.delete(num)
 				@file.delete_at(count)
+				@linkCount += 1
 				isHit = false
 			else
 				count -= 1
@@ -164,6 +166,8 @@ class SALSA
 		puts "--------------"
 		puts "@file.size"
 		puts @file.size
+
+		@firstDensity = @linkCount.to_f / @number.size.to_f
 
 		return @matrix
 	end
@@ -386,8 +390,12 @@ class SALSA
 		maxAuthority = sortScore.max { |a, b| a[1] <=> b[1] }
 		sortScore.shift
 
+		@density = @linkCount.to_f / @number.size.to_f
+
 		if(maxAuthority != nil)
-			if(maxAuthority[1] > $threshold)
+			#if(maxAuthority[1] > $threshold)
+			#if(@density  >= @firstDensity)
+			if(@density >= 0.01)
 				return maxAuthority[0]
 			else
 				return nil
@@ -409,8 +417,12 @@ class SALSA
 		maxHub = sortScore.max { |a, b| a[1] <=> b[1] }
 		sortScore.shift
 
+		@density = @linkCount.to_f / @number.size.to_f
+
 		if(maxHub != nil)
-			if(maxHub[1] > $threshold)
+			#if(maxHub[1] > $threshold)
+			#if(@density >= @firstDensity)
+			if(@density >= 0.01)
 				return maxHub[0]
 			else
 				return nil

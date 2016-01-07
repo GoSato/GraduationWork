@@ -1,3 +1,7 @@
+#------------------------------------------------------------------#
+#最初に密度を計算して、ページ追加後、密度が最初の値を上回っていたらさらに追加
+#------------------------------------------------------------------#
+
 require 'benchmark'
 require 'matrix'
 require_relative './calcFinalScore.rb'
@@ -20,12 +24,12 @@ class SALSA
 			end
 		}
 
-		puts "-----最初のファイル------"
-		puts "@file"
-		p @file
-		puts "--------------"
-		puts "@file.size"
-		puts @file.size
+		# puts "-----最初のファイル------"
+		# puts "@file"
+		# p @file
+		# puts "--------------"
+		# puts "@file.size"
+		# puts @file.size
 
 		return @file.size	
 	end
@@ -72,9 +76,14 @@ class SALSA
 		# 一時的に追加するようの変数
 		initialSetList = Array.new
 
+		@keepList = Array.new
+
 		count = -1
 
 		isHit = false
+
+		# リンク数をカウント
+		@linkCount = 0
 
 		@file.reverse_each do |num|
 
@@ -99,7 +108,7 @@ class SALSA
 					end
 
 					@matrix[@number[first_num]][@number[second_num]] = 1
-					
+
 					break
 				end
 			end	
@@ -108,18 +117,22 @@ class SALSA
 			if(isHit)
 				#@file.delete(num)
 				@file.delete_at(count)
+				@linkCount += 1
 				isHit = false
 			else
 				count -= 1
 			end		
 		end
 
-		puts "-------ファイルからシードと関係のあるの消去-------"
-		puts "@file"
-		p @file
-		puts "--------------"
-		puts "@file.size"
-		puts @file.size
+		# puts "keepList"
+		# p @keepList
+
+		# puts "-------ファイルからシードと関係のあるの消去-------"
+		# puts "@file"
+		# p @file
+		# puts "--------------"
+		# puts "@file.size"
+		# puts @file.size
 
 		# 初期セットのサイズが100以下の時
 		for i in initialSetList do
@@ -140,6 +153,10 @@ class SALSA
 					if i[0].to_s != first_num && i[1].to_s != second_num
 				
 						@matrix[@number[first_num]][@number[second_num]] = 1
+
+						# 該当行をkeepListに追加
+						@keepList.push(num)
+						
 						isHit = true
 
 						break
@@ -150,18 +167,21 @@ class SALSA
 			if(isHit)
 				#@file.delete(num)
 				@file.delete_at(count)
+				@linkCount += 1
 				isHit = false
 			else
 				count -= 1
 			end	
 		end
 
-		puts "-------初期セット同士の行を消去-------"
-		puts "@file"
-		p @file
-		puts "--------------"
-		puts "@file.size"
-		puts @file.size
+		# puts "-------初期セット同士の行を消去-------"
+		# puts "@file"
+		# p @file
+		# puts "--------------"
+		# puts "@file.size"
+		# puts @file.size
+
+		@firstDensity = @linkCount.to_f / @number.size.to_f
 
 		return @matrix
 	end
@@ -384,8 +404,11 @@ class SALSA
 		maxAuthority = sortScore.max { |a, b| a[1] <=> b[1] }
 		sortScore.shift
 
+		@density = @linkCount.to_f / @number.size.to_f
+
 		if(maxAuthority != nil)
-			if(maxAuthority[1] > 0.01)
+			#if(maxAuthority[1] > $threshold)
+			if(@density  >= @firstDensity)
 				return maxAuthority[0]
 			else
 				return nil
@@ -407,8 +430,11 @@ class SALSA
 		maxHub = sortScore.max { |a, b| a[1] <=> b[1] }
 		sortScore.shift
 
+		@density = @linkCount.to_f / @number.size.to_f
+
 		if(maxHub != nil)
-			if(maxHub[1] > 0.01)
+			#if(maxHub[1] > $threshold)
+			if(@density >= @firstDensity)
 				return maxHub[0]
 			else
 				return nil
@@ -417,7 +443,7 @@ class SALSA
 	end
 
 	def add_page(page)
-		#puts "add_page"
+		puts "add_page"
 
 		list = [page]
 		isHit = false
@@ -448,18 +474,23 @@ class SALSA
 				end
 
 				@matrix[@number[first_num]][@number[second_num]] = 1
+				# 該当行をkeepListに追加
+				@keepList.push(num)
 
 			end
 
 			if(isHit)
 				#@file.delete(num)
 				@file.delete_at(count)
+				@linkCount += 1
 				isHit = false
 			else
 				count -= 1
 			end	
 
 		end
+
+		@density = @linkCount.to_f / @number.size.to_f
 
 		count = -1
 
@@ -488,7 +519,9 @@ class SALSA
 
 			@addList.reverse_each do |i|	
 
-				if i == first_num || i == second_num					
+				if i == first_num || i == second_num	
+					# 該当行をkeepListに追加
+					@keepList.push(num)				
 					@file.delete_at(count)
 					isHit = true
 					break
@@ -516,6 +549,43 @@ class SALSA
 			puts eval("$cluster#{i}").size
 		end
 	end	
+
+	def make_newFile
+		@finalfile = Array.new
+
+		@keepList = @keepList.uniq
+
+		# puts "-----------------"
+		# puts "finalkeepList"
+		# p @keepList
+		# puts @keepList.size
+
+		# puts "-----------------"
+		# puts "file"
+		# p @file
+		# puts @file.size
+
+		if(@keepList.size != 0)
+			@finalfile = @file + @keepList
+		else
+			@finalfile = @file
+		end
+
+		# puts "-----------------"
+		# puts "finalfile"
+		# p @finalfile
+		# puts @finalfile.size
+
+		@file = @finalfile
+
+		# puts "-----------------"
+		# puts "file change"
+		# p @file
+
+		# @keepList.each do |line|
+		#  	@file.concat(line)
+		# end
+	end
 
 end
 
@@ -605,6 +675,8 @@ result = Benchmark.realtime do
 				end
 			end
 
+			salsa.make_newFile
+
 			$num += 1
 
 		else
@@ -615,7 +687,7 @@ result = Benchmark.realtime do
 	# 近似値の計算
 	calcfinalscore()
 
-	salsa.print_cluster
+	#salsa.print_cluster
 
 	# 出力
 	# puts "-----------------"
