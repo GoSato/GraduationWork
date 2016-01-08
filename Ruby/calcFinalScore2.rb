@@ -45,8 +45,23 @@ def calcfinalscore
 	
 		end
 
+		wCopy = w.clone
+
+		wCopy.delete(0)
+
+		puts "wCopy"
+		p wCopy
+
+		# 中央値の算出
+		if wCopy.size % 2 != 0
+			i = wCopy.size.to_f / 2 - 0.5
+			average = wCopy[i]
+		else
+			average = (wCopy[wCopy.size / 2] + wCopy[(wCopy.size / 2) + 1]) / 2 
+		end
+
 		# 重みの平均の算出
-		average = w.inject(:+) / w.size
+		#average = w.inject(:+) / w.size
 
 		# 重みの平均点
 		puts "-----------------"

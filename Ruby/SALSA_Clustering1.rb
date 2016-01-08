@@ -1,6 +1,6 @@
 require 'benchmark'
 require 'matrix'
-require_relative './calcFinalScore.rb'
+require_relative './calcFinalScore2.rb'
 
 class SALSA
 
@@ -525,11 +525,12 @@ class SALSA
 		$num.times do |i|
 			puts "-----------------"
 			puts "cluster#{i}"
-			#File.write(fileName,eval("$cluster#{i}"))
 			p eval("$cluster#{i}")
+			puts "-----------------"
 			puts "clusterSize"
 			puts eval("$cluster#{i}").size
 		end
+
 	end	
 
 	def make_newFile

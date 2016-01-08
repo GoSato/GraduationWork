@@ -3,18 +3,14 @@ require 'matrix'
 
 class SALSA
 
-	$rankingSize = 100
+	$rankingSize = 5
 	
 	# rootsetからbasesetを作成
 	def extraction
 
 		# rootset
 		
-		#list = [196,2143,494,1068,1402,1545,2165,2166,2215,2646,3889,3890,3312] 
-		#list = [192,196,246,424,659,809,2120,2142,2143,2144,2145,2146,211,494,2165,2166,247,1068,252,2215,335,489,658,892,924,1372,1787,2475,2476,2477]
-		#list = [34]
-		list = [5926,9985,8999,8492,8427,6585,6485,2295,2498,1570,6732,7805,1270,3286,2172,398,238,232,2116,4211,5803,9833,9493,6855,9893,8197,7317,8838,8876,3717]
-		#list = [192,196,246,424,659,809,2120,2142,2143,2144,2145,2146,211,494,2165,2166,247,1068,252,2215,335,489,658,892,924,1372,1787,2475,2476,2477]
+		list = [3]
 
 		# basesetでの隣接行列
 		matrix = Hash.new { |h,k| h[k] = {} }
@@ -261,7 +257,7 @@ class SALSA
 		puts "-----------------"
 		puts "authority Ranking"
 		puts "-----------------"
-		#p aRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+		p aRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
 		aRank = aRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
 		$rankingSize.times do |j|
 			print aRank[j][0].to_i
@@ -277,7 +273,7 @@ class SALSA
 		puts "-----------------"
 		puts "hub Ranking"
 		puts "-----------------"
-		#p hRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
+		p hRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
 		hRank = hRank.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
 		$rankingSize.times do |j|
 			print hRank[j][0].to_i

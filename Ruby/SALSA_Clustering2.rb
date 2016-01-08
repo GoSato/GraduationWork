@@ -4,7 +4,7 @@ require_relative './calcFinalScore.rb'
 
 class SALSA
 
-	$threshold = 0.1
+	$threshold = 0.5
 
 	def make_List
 		#puts "make_List"
@@ -22,12 +22,12 @@ class SALSA
 			end
 		}
 
-		puts "-----最初のファイル------"
-		puts "@file"
-		p @file
-		puts "--------------"
-		puts "@file.size"
-		puts @file.size
+		# puts "-----最初のファイル------"
+		# puts "@file"
+		# p @file
+		# puts "--------------"
+		# puts "@file.size"
+		# puts @file.size
 
 		return @file.size	
 	end
@@ -116,12 +116,12 @@ class SALSA
 			end		
 		end
 
-		puts "-------ファイルからシードと関係のあるの消去-------"
-		puts "@file"
-		p @file
-		puts "--------------"
-		puts "@file.size"
-		puts @file.size
+		# puts "-------ファイルからシードと関係のあるの消去-------"
+		# puts "@file"
+		# p @file
+		# puts "--------------"
+		# puts "@file.size"
+		# puts @file.size
 
 		# 初期セットのサイズが100以下の時
 		for i in initialSetList do
@@ -149,6 +149,7 @@ class SALSA
 				end
 			end
 
+			# 初期ページ同士の行を削除
 			if(isHit)
 				#@file.delete(num)
 				@file.delete_at(count)
@@ -158,12 +159,12 @@ class SALSA
 			end	
 		end
 
-		puts "-------初期セット同士の行を消去-------"
-		puts "@file"
-		p @file
-		puts "--------------"
-		puts "@file.size"
-		puts @file.size
+		# puts "-------初期セット同士の行を消去-------"
+		# puts "@file"
+		# p @file
+		# puts "--------------"
+		# puts "@file.size"
+		# puts @file.size
 
 		return @matrix
 	end
@@ -453,6 +454,7 @@ class SALSA
 
 			end
 
+			# スコアの高いページ同士の行を削除
 			if(isHit)
 				#@file.delete(num)
 				@file.delete_at(count)
@@ -460,6 +462,13 @@ class SALSA
 			else
 				count -= 1
 			end	
+
+			# puts "-------スコアの高いページ同士の行を削除-------"
+			# puts "@file"
+			# p @file
+			# puts "--------------"
+			# puts "@file.size"
+			# puts @file.size
 
 		end
 
@@ -504,6 +513,50 @@ class SALSA
 			end
 		end
 
+		# puts "-------スコアの高いページとリンク関係にある行を消去-------"
+		# puts "@file"
+		# p @file
+		# puts "--------------"
+		# puts "@file.size"
+		# puts @file.size
+
+		$size = @file.size
+	end
+
+	def delete_relationPage
+
+		count = -1
+		isHit = false
+
+		#スコアの高いページとリンク関係にある行を消去
+		@file.reverse_each do |num|
+
+			first_num = num[0]
+			second_num = num[1]		
+
+			eval("$cluster#{$num}").reverse_each do |i|	
+
+				if i == first_num || i == second_num					
+					@file.delete_at(count)
+					isHit = true
+					break
+				end
+			end
+
+			if(isHit)
+				isHit = false
+			else
+				count -= 1
+			end
+		end
+
+		# puts "-------スコアの高いページとリンク関係にある行を消去-------"
+		# puts "@file"
+		# p @file
+		# puts "--------------"
+		# puts "@file.size"
+		# puts @file.size
+
 		$size = @file.size
 	end
 
@@ -516,6 +569,7 @@ class SALSA
 			p eval("$cluster#{i}")
 			puts "clusterSize"
 			puts eval("$cluster#{i}").size
+
 		end
 	end	
 
@@ -603,9 +657,14 @@ result = Benchmark.realtime do
 					eval("@aScoreSortOutput#{$num} = aScoreSort.clone")
 					eval("@hScoreSortOutput#{$num} = hScoreSort.clone")	
 
+					#salsa.delete_relationPage
+
 					break
 				end
 			end
+
+			puts "-----------------"
+			p eval("@aScoreSortOutput#{$num}")
 
 			$num += 1
 
@@ -617,7 +676,7 @@ result = Benchmark.realtime do
 	# 近似値の計算
 	calcfinalscore()
 
-	#salsa.print_cluster
+	# salsa.print_cluster
 
 	# 出力
 	# puts "-----------------"

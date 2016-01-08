@@ -394,8 +394,8 @@ class SALSA
 
 		if(maxAuthority != nil)
 			#if(maxAuthority[1] > $threshold)
-			#if(@density  >= @firstDensity)
-			if(@density >= 0.01)
+			if(@density  >= @firstDensity)
+			#if(@density >= 0.01)
 				return maxAuthority[0]
 			else
 				return nil
@@ -421,8 +421,8 @@ class SALSA
 
 		if(maxHub != nil)
 			#if(maxHub[1] > $threshold)
-			#if(@density >= @firstDensity)
-			if(@density >= 0.01)
+			if(@density >= @firstDensity)
+			#if(@density >= 0.01)
 				return maxHub[0]
 			else
 				return nil
@@ -515,6 +515,43 @@ class SALSA
 				count -= 1
 			end
 		end
+
+		$size = @file.size
+	end
+
+	def delete_relationPage
+
+		count = -1
+		isHit = false
+
+		#スコアの高いページとリンク関係にある行を消去
+		@file.reverse_each do |num|
+
+			first_num = num[0]
+			second_num = num[1]		
+
+			eval("$cluster#{$num}").reverse_each do |i|	
+
+				if i == first_num || i == second_num					
+					@file.delete_at(count)
+					isHit = true
+					break
+				end
+			end
+
+			if(isHit)
+				isHit = false
+			else
+				count -= 1
+			end
+		end
+
+		puts "-------スコアの高いページとリンク関係にある行を消去-------"
+		puts "@file"
+		p @file
+		puts "--------------"
+		puts "@file.size"
+		puts @file.size
 
 		$size = @file.size
 	end
@@ -614,6 +651,8 @@ result = Benchmark.realtime do
 
 					eval("@aScoreSortOutput#{$num} = aScoreSort.clone")
 					eval("@hScoreSortOutput#{$num} = hScoreSort.clone")	
+
+					salsa.delete_relationPage
 
 					break
 				end
