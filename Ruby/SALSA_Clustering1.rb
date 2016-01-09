@@ -670,7 +670,7 @@ result = Benchmark.realtime do
 	# 近似値の計算
 	calcfinalscore()
 
-	# salsa.print_cluster
+	#salsa.print_cluster
 
 	# 出力
 	# puts "-----------------"

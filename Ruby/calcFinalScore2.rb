@@ -7,7 +7,7 @@ def calcfinalscore
 		puts "calFinalScore"
 
 		
-		queryPage = [192,196,246,424,659,809,2120,2142,2143,2144,2145,2146,211,494,2165,2166,247,1068,252,2215,335,489,658,892,924,1372,1787,2475,2476,2477]
+		queryPage = [5926,9985,8999,8492,8427,6585,6485,2295,2498,1570,6732,7805,1270,3286,2172,398,238,232,2116,4211,5803,9833,9493,6855,9893,8197,7317,8838,8876,3717]
 
 		# クラスター毎にクエリページをいくつ含むか
 		counter = []
@@ -38,7 +38,9 @@ def calcfinalscore
 
 			# 重みを計算
 			if(counter[clusterNum] != 0)
-				w[clusterNum] = counter[clusterNum] * 1.0 / (queryPage.size * eval("@aScoreSortOutput#{clusterNum}").size * 1.0)
+				#w[clusterNum] = counter[clusterNum] * 1.0 / (queryPage.size * eval("@aScoreSortOutput#{clusterNum}").size * 1.0)
+				#w[clusterNum] = counter[clusterNum] * 1.0 / eval("@aScoreSortOutput#{clusterNum}").size * 1.0
+				w[clusterNum] = counter[clusterNum] * eval("@aScoreSortOutput#{clusterNum}").size * 1.0 / (queryPage.size * 1.0)
 			else
 				w[clusterNum] = 0
 			end
@@ -49,6 +51,8 @@ def calcfinalscore
 
 		wCopy.delete(0)
 
+		wCopy = wCopy.sort {|a, b| b <=> a }
+
 		puts "wCopy"
 		p wCopy
 
@@ -57,7 +61,7 @@ def calcfinalscore
 			i = wCopy.size.to_f / 2 - 0.5
 			average = wCopy[i]
 		else
-			average = (wCopy[wCopy.size / 2] + wCopy[(wCopy.size / 2) + 1]) / 2 
+			average = (wCopy[wCopy.size / 2] + wCopy[(wCopy.size / 2) - 1]) / 2
 		end
 
 		# 重みの平均の算出
@@ -69,27 +73,12 @@ def calcfinalscore
 		puts average
 
 		puts "重み"
-		p w
-
-
-		# w.size.times do |i|
-		# 	if w[i] > 0
-		# 		eval("@aScoreSortOutput#{i}").each do |j|
-		# 			newSocre = j[1].to_f * w[i]
-		# 			@finalAuthorityScore[j[0]] = @finalAuthorityScore[j[1]].to_f + newSocre
-		# 			puts "@finalAuthorityScore[33]"
-		# 			puts @finalAuthorityScore["33"] 
-		# 		end
-
-		# 		eval("@hScoreSortOutput#{i}").each do |j|
-		# 			newSocre = j[1].to_f * w[i]
-		# 			@finalHubScore[j[0]] =  @finalHubScore[j[1]].to_f + newSocre
-		# 		end
-		# 	end
-		# end
+		p wCopy
 
 		w.size.times do |i|
-			if w[i] > average
+			if w[i] > 0
+				puts "i"
+				puts i
 				eval("@aScoreSortOutput#{i}").each do |j|
 					newAutoritySocre[j[0]] =  j[1].to_f * w[i]
 					@finalAuthorityScore[j[0]] = @finalAuthorityScore[j[0]].to_f + newAutoritySocre[j[0]].to_f
