@@ -7,7 +7,7 @@ def calcfinalscore
 		puts "calFinalScore"
 
 		
-		queryPage = [5926,9985,8999,8492,8427,6585,6485,2295,2498,1570,6732,7805,1270,3286,2172,398,238,232,2116,4211,5803,9833,9493,6855,9893,8197,7317,8838,8876,3717]
+		queryPage = [192,196,246,424,659,809,2120,2142,2143,2144,2145,2146,211,494,2165,2166,247,1068,252,2215,335,489,658,892,924,1372,1787,2475,2476,2477]
 
 		# クラスター毎にクエリページをいくつ含むか
 		counter = []
@@ -76,9 +76,7 @@ def calcfinalscore
 		p wCopy
 
 		w.size.times do |i|
-			if w[i] > average
-				puts "i"
-				puts i
+			if w[i] > 0
 				eval("@aScoreSortOutput#{i}").each do |j|
 					newAutoritySocre[j[0]] =  j[1].to_f * w[i]
 					@finalAuthorityScore[j[0]] = @finalAuthorityScore[j[0]].to_f + newAutoritySocre[j[0]].to_f

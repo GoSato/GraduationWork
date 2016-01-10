@@ -3,7 +3,7 @@ require 'matrix'
 
 class SALSA
 
-	$rankingSize = 50
+	$rankingSize = 30
 	
 	# rootsetからbasesetを作成
 	def extraction
