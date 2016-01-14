@@ -1,13 +1,13 @@
 def calcfinalscore
 	result = Benchmark.realtime do
 
-		$rankingSize = 100
+		$rankingSize = 20
 
 		puts "-----------------"
 		puts "calFinalScore"
 
 		
-		queryPage = [192,196,246,424,659,809,2120,2142,2143,2144,2145,2146,211,494,2165,2166,247,1068,252,2215,335,489,658,892,924,1372,1787,2475,2476,2477]
+		queryPage = [1,3,2,4,8,9,10,14,28,29]
 
 		# クラスター毎にクエリページをいくつ含むか
 		counter = []

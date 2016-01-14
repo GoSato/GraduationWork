@@ -4,7 +4,7 @@ require_relative './calcFinalScore2.rb'
 
 class SALSA
 
-	$threshold = 0.5
+	$threshold = 0.01
 
 	def make_List
 		#puts "make_List"

@@ -1,10 +1,10 @@
 require 'benchmark'
 require 'matrix'
-require_relative './calcFinalScore3.rb'
+require_relative './calcFinalScore.rb'
 
 class SALSA
 
-	$threshold = 0.1
+	$threshold = 0.5
 
 	def make_List
 		#puts "make_List"
