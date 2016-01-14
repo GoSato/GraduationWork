@@ -3,14 +3,14 @@ require 'matrix'
 
 class SALSA
 
-	$rankingSize = 10
+	$rankingSize = 30
 	
 	# rootsetからbasesetを作成
 	def extraction
 
 		# rootset
 		
-		list = [5,843,1476,4562,4663,4664,4665,4666,4667,4668,4669,4670,2894,8157,8617,7376,9119,9120,9121,9122,9123,9124,9125,9126,9127,11054,16938,20241,20371,20372]
+		list = [5,843,1476,4562,4663]
 
 		# basesetでの隣接行列
 		matrix = Hash.new { |h,k| h[k] = {} }

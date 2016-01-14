@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015) (preloaded format=platex 2016.1.10)  14 JAN 2016 10:08
+This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015) (preloaded format=platex 2016.1.10)  15 JAN 2016 01:17
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -158,6 +158,9 @@ LaTeX Warning: Label `figure:sample' multiply defined.
 
 LaTeX Warning: Label `figure:sample' multiply defined.
 
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
 )
 \openout1 = `salsa-GoSato-utf8.aux'.
 
@@ -241,12 +244,14 @@ LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <14.4> not available
 (Font)              Font shape `JY1/gt/m/n' tried instead on input line 115.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 115.
-File: sample.eps Graphic file (type eps)
-<sample.eps> [3
+File: webgraph.eps Graphic file (type eps)
+<webgraph.eps> [3
 
 ]
-File: sample.eps Graphic file (type eps)
- <sample.eps> [4] [5]
+File: pagerank.eps Graphic file (type eps)
+ <pagerank.eps> [4]
+File: hits.eps Graphic file (type eps)
+ <hits.eps> [5]
 第 3 章
 [6
 
@@ -262,7 +267,7 @@ File: sample.eps Graphic file (type eps)
 第 6 章
 (I search kanjifont definition file: . . ) (I search font definition file: . .
 . . . . . )
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 215.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 227.
 
  (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
@@ -276,11 +281,11 @@ File: sample.eps Graphic file (type eps)
 ]
 
 LaTeX Font Warning: Font shape `JT1/gt/m/it' undefined
-(Font)              using `JT1/gt/m/n' instead on input line 308.
+(Font)              using `JT1/gt/m/n' instead on input line 320.
 
 
 LaTeX Font Warning: Font shape `JY1/gt/m/it' undefined
-(Font)              using `JY1/gt/m/n' instead on input line 308.
+(Font)              using `JY1/gt/m/n' instead on input line 320.
 
 [12
 
@@ -293,12 +298,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 1773 strings out of 493742
- 21341 string characters out of 6151252
+ 1779 strings out of 493742
+ 21405 string characters out of 6151252
  80978 words of memory out of 5000000
- 5273 multiletter control sequences out of 15000+600000
+ 5276 multiletter control sequences out of 15000+600000
  20314 words of font info for 74 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
  32i,7n,26p,608b,311s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on salsa-GoSato-utf8.dvi (16 pages, 27272 bytes).
+Output written on salsa-GoSato-utf8.dvi (16 pages, 27680 bytes).

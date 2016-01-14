@@ -118,18 +118,19 @@ PageRankアルゴリズムは、検索キーワードに依存せずスコア計
 
 1998年までWEBランキングアルゴリズムは、WEBページのテキストやHTML構造といった内容得点で順位付けを行っていた。この内容得点というのは、各WEBページにどこにどれほどクエリの文字列が含まれているのか計算したものであった。しかし、WEBが巨大化し限りなく増大していったことや、内容得点がスパムの影響を受けやすかったことから、1998年までには従来の内容得点は有効でないことが明らかになっていた。
 
-そこで、内容得点だけではなく、WEBのハイパーリンク構造に対して有向グラフを作成し、その有向グラフを用いてWEBページの人気得点を計算するリンク解析手法が登場した。これによって従来の内容得点によるランキングよりも品質が向上し、検索エンジンの利用者は劇的に増え、リンク解析手法はWEBランキングアルゴリズムの主流となった。
-
+そこで、内容得点だけではなく、WEBのハイパーリンク構造に対して有向グラフを作成し、その有向グラフを用いてWEBページの人気得点を計算するリンク解析手法が登場した。
 
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=sample.eps,scale=0.6}
+\psfig{file=webgraph.eps,scale=0.8}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{WEBグラフ}
 \label{figure:sample}
 \end{figure}
+
+これによって従来の内容得点によるランキングよりも品質が向上し、検索エンジンの利用者は劇的に増え、リンク解析手法はWEBランキングアルゴリズムの主流となった。
 
 
 \section{PageRank}
@@ -141,7 +142,7 @@ PageRankは、当時Stanford Universityに在学していたSergey BrinとLarry 
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=sample.eps,scale=0.6}
+\psfig{file=pagerank.eps,scale=1.0}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{PageRankの概念図}
@@ -179,6 +180,17 @@ PageRankの特徴の1つとして、クエリ独立型のリンク解析手法�
 これは、クエリに関係なく、最初から全てのWEBページに対するWEBランキングが決定しているということである。クエリが与えられてからは、既に作成されているWEBランキングに適切なフィルタリングを施し、検索結果としてWEBランキングを表示するだけである。このためPageRankは、HITSやSALSAのようなクエリ依存型のリンク解析手法に比べ、応答時間が短い。
 
 \section{HITS}
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=hits.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{権威とハブ}
+\label{figure:sample}
+\end{figure}
+
 \section{SALSA}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
