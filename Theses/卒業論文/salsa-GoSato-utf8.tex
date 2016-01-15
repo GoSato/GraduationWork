@@ -181,6 +181,11 @@ PageRankの特徴の1つとして、クエリ独立型のリンク解析手法�
 
 \section{HITS}
 
+HITSアルゴリズムは、1998年にJon Kleinbergによって発明された。PageRankと同様、WEBページに関連した人気得点を作るのにWEBのハイパーリンク構造を用いる。しかし、PageRankと違いHITSは各ページに対して権威スコアとハブスコアという2種類のスコアを作成し、権威ページとハブページを定義する。
+
+権威ページはたくさんの入リンクを持つページであり、ハブはたくさんの出リンクを持つページである。
+また、良い権威ページたちは良いハブページたちによってリンクされており、良いハブページたちは良い権威ページたちをリンクしているという循環的な性質を持っている。
+
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
@@ -190,6 +195,42 @@ PageRankの特徴の1つとして、クエリ独立型のリンク解析手法�
 \caption{権威とハブ}
 \label{figure:sample}
 \end{figure}
+
+HITSではWEBの構造を有向グラフとして捉え、各スコアの計算を行う。権威スコアとハブスコアを
+計算する上で有向グラフの隣接行列$L$を用いて以下のように行列の形で書くことができる。
+
+\begin{equation}
+L_(i,j) =
+\begin{cases}
+\; 1　(ノードiからノードjへのリンクがあるとき) \\
+\; 0　(ノードiからノードjへのリンクがないとき)
+\end{cases}
+\end{equation}
+
+この隣接行列$L$を用いて、権威スコア$x$とハブスコア$y$の計算は以下の式(2.5)(2.6)(2.7)で定義される。
+この計算は、ハブスコアの初期値を$y^(0) = e$とし、各スコアが収束するまで繰り返される。ここで$e$は全て1の列ベクトルである。
+
+\begin{eqnarray}
+x^{(k)} = L^Ty^{(k-1)} \\
+y^{(k)} = Lx^{(k)} \\
+k = k + 1
+\end{eqnarray}
+
+HITSの特徴の一つとして、クエリ依存型のリンク解析手法であるという点が挙げれられる。クエリが与えられると、クエリに関連するページの集合であるroot setの抽出を行う。そこから、root setとリンク関係にある距離1のページを含めた集合であるbase setに拡張する。その後、base setの隣接行列を作成し、base set内の各ページに対してスコアを割り当てWEBランキングを作成する。以下の図2.4はroot setからbase setを作成する処理を視覚化したものである。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=hits2.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{root setとbase set}
+\label{figure:sample}
+\end{figure}
+
+HITSはクエリに適した検索結果を得られるが、クエリが与えられてからbase setの作成とスコア計算を行うため、無視できないほどの応答時間がかかってしまう。
+
+さらに、ランキングの対象となるbase setをWEBのリンク構造から作成するため、クエリと関係の小さいページがランキング上位に表示されてしまうことがある。この現象を話題の横滑り(topic draft)と呼ぶ。
 
 \section{SALSA}
 
