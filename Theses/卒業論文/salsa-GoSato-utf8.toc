@@ -4,18 +4,18 @@
 \contentsline {section}{\numberline {2.2}PageRank}{4}
 \contentsline {section}{\numberline {2.3}HITS}{5}
 \contentsline {section}{\numberline {2.4}SALSA}{6}
-\contentsline {chapter}{\numberline {第3章}提案手法}{7}
-\contentsline {section}{\numberline {3.1}クエリ依存型リンク解析手法高速化の概要}{7}
-\contentsline {section}{\numberline {3.2}提案手法の概要}{7}
-\contentsline {section}{\numberline {3.3}クラスタリングアルゴリズム}{7}
-\contentsline {section}{\numberline {3.4}スコアの近似}{7}
-\contentsline {chapter}{\numberline {第4章}実験と考察}{8}
-\contentsline {section}{\numberline {4.1}評価指標}{8}
-\contentsline {section}{\numberline {4.2}実データでの実験}{8}
-\contentsline {section}{\numberline {4.3}大規模データでの実験}{8}
-\contentsline {chapter}{\numberline {第5章}まとめ}{9}
-\contentsline {chapter}{\numberline {第6章}形式}{10}
-\contentsline {section}{\numberline {6.1}表紙}{10}
-\contentsline {section}{\numberline {6.2}本体}{10}
-\contentsline {chapter}{\hbox to\@lnumwidth {\hfil }謝辞}{12}
-\contentsline {chapter}{\hbox to\@lnumwidth {\hfil }参考文献}{13}
+\contentsline {chapter}{\numberline {第3章}提案手法}{8}
+\contentsline {section}{\numberline {3.1}クエリ依存型リンク解析手法高速化の概要}{8}
+\contentsline {section}{\numberline {3.2}提案手法の概要}{10}
+\contentsline {section}{\numberline {3.3}クラスタリングアルゴリズム}{10}
+\contentsline {section}{\numberline {3.4}スコアの近似}{10}
+\contentsline {chapter}{\numberline {第4章}実験と考察}{11}
+\contentsline {section}{\numberline {4.1}評価指標}{11}
+\contentsline {section}{\numberline {4.2}実データでの実験}{11}
+\contentsline {section}{\numberline {4.3}大規模データでの実験}{11}
+\contentsline {chapter}{\numberline {第5章}まとめ}{12}
+\contentsline {chapter}{\numberline {第6章}形式}{13}
+\contentsline {section}{\numberline {6.1}表紙}{13}
+\contentsline {section}{\numberline {6.2}本体}{13}
+\contentsline {chapter}{\hbox to\@lnumwidth {\hfil }謝辞}{15}
+\contentsline {chapter}{\hbox to\@lnumwidth {\hfil }参考文献}{16}
