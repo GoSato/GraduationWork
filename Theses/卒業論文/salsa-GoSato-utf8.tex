@@ -123,7 +123,7 @@ PageRankアルゴリズムは、検索キーワードに依存せずスコア計
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=webgraph.eps,scale=0.8}
+\psfig{file=image/webgraph.eps,scale=0.8}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{WEBグラフ}
@@ -142,7 +142,7 @@ PageRankは、当時Stanford Universityに在学していたSergey BrinとLarry 
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=pagerank.eps,scale=1.0}
+\psfig{file=image/pagerank.eps,scale=1.0}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{PageRankの概念図}
@@ -189,7 +189,7 @@ HITSは、1998年にJon Kleinbergによって発明された。PageRankと同様
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=hits.eps,scale=1.0}
+\psfig{file=image/hits.eps,scale=1.0}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{権威とハブ}
@@ -221,7 +221,7 @@ HITSの特徴の一つとして、クエリ依存型のリンク解析手法で�
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=hits2.eps,scale=1.0}
+\psfig{file=image/hits2.eps,scale=1.0}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{root setとbase set}
@@ -277,7 +277,7 @@ SALSAもHITSと同様に、クエリが与えられてからbase setの作成と
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=query.eps,scale=1.0}
+\psfig{file=image/query.eps,scale=1.0}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{クエリ独立型リンク解析手法}
@@ -293,7 +293,7 @@ SALSAもHITSと同様に、クエリが与えられてからbase setの作成と
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=query2.eps,scale=1.0}
+\psfig{file=image/query2.eps,scale=1.0}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{クエリ依存型リンク解析手法}
@@ -306,7 +306,7 @@ SALSAもHITSと同様に、クエリが与えられてからbase setの作成と
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=query3.eps,scale=1.0}
+\psfig{file=image/query3.eps,scale=1.0}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{クエリ依存型リンク解析手法の高速化}
@@ -319,9 +319,78 @@ SALSAもHITSと同様に、クエリが与えられてからbase setの作成と
 
 \section{提案手法の概要}
 
-てすてす
+この節では、まずはじめに提案手法の概要について解説する。高速化したSALSAアルゴリズムでは、従来のSALSAアルゴリズムより高速な処理が可能だが、従来のSALSAアルゴリズムで作成したランキングと比べてランキングの精度が落ちてしまうという問題があった。そこで本研究では、従来のSALSAアルゴリズムより高速で、かつ従来のSALSAアルゴリズムに近いWEBランキングを作成する手法を提案する。具体的には、先行研究と同様にWEBページのクラスタリングと各スコアの計算を前処理として行うが、そのクラスタリング部分と最終スコアの近似部分において改良を加える。
+
+クラスタリングでは、まず少数のページで初期セットを作成し、そこにリンク関係のあるページを追加していくことでクラスタを大きくしていく。先行研究による高速化アルゴリズムでは、初期セットのサイズを固定し、全てのページが1つ以上のクラスタに所属するまでクラスタリングを行う。この場合、最終スコアの近似を行う際に、多くのクラスタに所属しているページほどスコアが大きくなり、適切なランキングを得ることができない。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/clustering1.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{全てのページが1つ以上のクラスタに所属}
+\label{figure:sample}
+\end{figure}
+
+そこで今回提案する手法では、全てのページはそれぞれ1つのクラスタのみに所属するものとする。これに伴い、最終スコアの近似式に改良を加える。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/clustering2.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{全てのページが1つのクラスタに所属}
+\label{figure:sample}
+\end{figure}
+
+詳しいクラスタリングアルゴリズム、スコアの近似については、次節以降で解説する。
 
 \section{クラスタリングアルゴリズム}
+
+高速化のための前処理として、全てのWEBページをクラスタと呼ばれる集合に分けて、それぞれのクラスタ内で各スコア計算を行う。ここでは、クラスタリングアルゴリズムについて解説する。
+
+まず、クラスタのseed pageを選択する。seed pageは、まだどのクラスタにも属していないページのうち、出リンク数、入リンク数の多いものを選択する。
+
+その後、seed pageと相互リンクしているページ、出リンク先や入リンク元となるページを順にクラスタへ追加し、初期セットを作成する。以下の図3.6から3.8で初期セット作成までの流れを視覚化した。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/rootset1.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{クラスタへseed pageの追加}
+\label{figure:sample}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/rootset2.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{seed pageと相互リンクしているページの追加}
+\label{figure:sample}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/rootset3.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{seed pageの出リンク先、入リンク元であるページの追加}
+\label{figure:sample}
+\end{figure}
+
+先行研究における手法では、初期セットの最大サイズを全ページ数の1/100としていた。
+これは、クラスタの最大サイズを全ページ数の約1/10と見積もり、初期セットの最大サイズがさらにその1/10となるように見積もった数値である。
+今回提案する手法では、
+
+\newpage
+
 \section{スコアの近似}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -390,15 +459,6 @@ SALSAもHITSと同様に、クエリが与えられてからbase setの作成と
 \end{table}
 \medskip
 
-\begin{figure}[htbp]
-\begin{center}
-%\includegraphics[width=3cm]{sample.eps}
-\psfig{file=sample.eps,scale=0.6}
-%\epsfile{file=sample.eps,scale=0.6}
-\end{center}
-\caption{図の例}
-\label{figure:sample}
-\end{figure}
 
 詳しくは参考書\cite{okumura2010,yoshinaga2009}などを参照のこと。
 また、奥村晴彦氏の「\TeX Wiki」

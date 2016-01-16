@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015) (preloaded format=platex 2016.1.10)  15 JAN 2016 19:39
+This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015) (preloaded format=platex 2016.1.10)  16 JAN 2016 18:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -173,6 +173,18 @@ LaTeX Warning: Label `figure:sample' multiply defined.
 
 LaTeX Warning: Label `figure:sample' multiply defined.
 
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
 )
 \openout1 = `salsa-GoSato-utf8.aux'.
 
@@ -256,62 +268,73 @@ LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <14.4> not available
 (Font)              Font shape `JY1/gt/m/n' tried instead on input line 115.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 115.
-File: webgraph.eps Graphic file (type eps)
-<webgraph.eps> [3
+File: image/webgraph.eps Graphic file (type eps)
+<image/webgraph.eps> [3
 
 ]
-File: pagerank.eps Graphic file (type eps)
- <pagerank.eps> [4]
-File: hits.eps Graphic file (type eps)
- <hits.eps> [5]
-File: hits2.eps Graphic file (type eps)
- <hits2.eps> [6] [7]
+File: image/pagerank.eps Graphic file (type eps)
+ <image/pagerank.eps> [4]
+File: image/hits.eps Graphic file (type eps)
+ <image/hits.eps> [5]
+File: image/hits2.eps Graphic file (type eps)
+
+<image/hits2.eps> [6] [7]
 第 3 章
-File: query.eps Graphic file (type eps)
-<query.eps> [8
+File: image/query.eps Graphic file (type eps)
+<image/query.eps> [8
 
 ]
-File: query2.eps Graphic file (type eps)
- <query2.eps>
-File: query3.eps Graphic file (type eps)
- <query3.eps>
+File: image/query2.eps Graphic file (type eps)
+ <image/query2.eps>
+File: image/query3.eps Graphic file (type eps)
+ <image/query3.eps>
 Overfull \hbox (18.0675pt too wide) in paragraph at lines 309--311
  [] 
  []
 
-[9] [10]
+[9]
+File: image/clustering1.eps Graphic file (type eps)
+ <image/clustering1.eps>
+File: image/clustering2.eps Graphic file (type eps)
+ <image/clustering2.eps> [10] [11]
+File: image/rootset1.eps Graphic file (type eps)
+
+<image/rootset1.eps>
+File: image/rootset2.eps Graphic file (type eps)
+ <image/rootset2.eps>
+File: image/rootset3.eps Graphic file (type eps)
+ <image/rootset3.eps> [12] [13]
+[14]
 第 4 章
-[11
+[15
 
 ]
 第 5 章
-[12
+[16
 
 ]
 第 6 章
 (I search kanjifont definition file: . . ) (I search font definition file: . .
 . . . . . )
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 348.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 417.
 
  (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-File: sample.eps Graphic file (type eps)
+[17
 
-<sample.eps> [13
-
-] [14] [15
+] [18] [19
 
 ]
 
 LaTeX Font Warning: Font shape `JT1/gt/m/it' undefined
-(Font)              using `JT1/gt/m/n' instead on input line 441.
+(Font)              using `JT1/gt/m/n' instead on input line 501.
 
 
 LaTeX Font Warning: Font shape `JY1/gt/m/it' undefined
-(Font)              using `JY1/gt/m/n' instead on input line 441.
+(Font)              using `JY1/gt/m/n' instead on input line 501.
 
-[16
+[20
 
 ] (./salsa-GoSato-utf8.aux)
 
@@ -322,12 +345,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 1787 strings out of 493742
- 21481 string characters out of 6151252
+ 1796 strings out of 493742
+ 21671 string characters out of 6151252
  80978 words of memory out of 5000000
- 5280 multiletter control sequences out of 15000+600000
+ 5284 multiletter control sequences out of 15000+600000
  20314 words of font info for 74 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
  32i,7n,26p,608b,311s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on salsa-GoSato-utf8.dvi (20 pages, 40792 bytes).
+Output written on salsa-GoSato-utf8.dvi (24 pages, 46764 bytes).

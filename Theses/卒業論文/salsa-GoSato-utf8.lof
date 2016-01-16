@@ -8,7 +8,11 @@
 \contentsline {figure}{\numberline {3.1}{\ignorespaces クエリ独立型リンク解析手法}}{8}
 \contentsline {figure}{\numberline {3.2}{\ignorespaces クエリ依存型リンク解析手法}}{9}
 \contentsline {figure}{\numberline {3.3}{\ignorespaces クエリ依存型リンク解析手法の高速化}}{10}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces 全てのページが1つ以上のクラスタに所属}}{11}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces 全てのページが1つのクラスタに所属}}{11}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces クラスタへseed pageの追加}}{12}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces seed pageと相互リンクしているページの追加}}{13}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces seed pageの出リンク先、入リンク元であるページの追加}}{13}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces 図の例}}{14}
