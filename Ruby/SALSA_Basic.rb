@@ -10,7 +10,7 @@ class SALSA
 
 		# rootset
 		
-		list = [5,843,1476,4562,4663]
+		list = [474349,4562,246369,835128,115587]
 
 		# basesetでの隣接行列
 		matrix = Hash.new { |h,k| h[k] = {} }

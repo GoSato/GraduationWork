@@ -20,6 +20,7 @@
 
 %%%%%%%%%%追加
 \usepackage{amsmath,amsthm,amssymb,cases}
+\usepackage{algorithmic,algorithm}
 
 \setcounter{tocdepth}{3}
 \setcounter{page}{-1}
@@ -333,7 +334,7 @@ SALSAもHITSと同様に、クエリが与えられてからbase setの作成と
 \label{figure:sample}
 \end{figure}
 
-そこで今回提案する手法では、全てのページはそれぞれ1つのクラスタのみに所属するものとする。これに伴い、最終スコアの近似式に改良を加える。
+そこで今回提案する手法では、全てのページはそれぞれ1つのクラスタにのみ所属するものとする。したがって、1度クラスタに追加されたページが再び別のクラスタに所属することはないので、クラスタリングにおける処理の高速化も期待することができる。これに伴い、最終スコアの近似式に改良を加える。
 
 \begin{figure}[htbp]
 \begin{center}
@@ -385,13 +386,224 @@ SALSAもHITSと同様に、クエリが与えられてからbase setの作成と
 \label{figure:sample}
 \end{figure}
 
+\newpage
+
 先行研究における手法では、初期セットの最大サイズを全ページ数の1/100としていた。
-これは、クラスタの最大サイズを全ページ数の約1/10と見積もり、初期セットの最大サイズがさらにその1/10となるように見積もった数値である。
-今回提案する手法では、
+これは、クラスタの最大サイズを全ページ数の約1/10と見積もり、初期セットの最大サイズがさらにその1/10となるように見積もった数値である。この場合、初期セット候補が最大サイズを越えた時、本来seed pageとリンク関係にあるページを適切に抽出することができない。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/rootset4.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{先行研究における手法での初期セット定義(最大サイズ5とした時)}
+\label{figure:sample}
+\end{figure}
+
+そこで今回提案する手法では、最終スコアの近似により適したクラスタを作成するため、初期セットのサイズを固定にするのではなく、seed pageとリンク関係にある距離1のページを全て初期セットとする。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/rootset5.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{本研究における手法での初期セット定義}
+\label{figure:sample}
+\end{figure}
 
 \newpage
 
-\section{スコアの近似}
+初期セットを作成した後は、初期セット内の各ページに対してSALSAスコアを計算し、スコアの高いページとリンクしているページから順にクラスタへ追加していく。
+
+この時、WEBランキングの元となるSALSAスコアの計算上、注意しなければならない点がある。SALSAアルゴリズムでは、各ページの出リンク数と入リンク数によってスコアに重み付けを行う。例えば、ハブスコアの高いページ$i$からリンクされているページ$j$があるとする。このとき、ページ$i$の出リンク数が多い場合、必ずしもページ$j$の権威スコアが高くなるとは限らない。このことから、単純にハブスコアの高いページの出リンク先や、権威スコアの高いページの入リンク元をクラスタに追加することは適切ではない。
+
+そこで、本研究における手法では、クラスタ内での各ページに対して「ハブスコアを出リンク数で割った値」と「権威スコアを入リンク数で割った値」を計算し、それぞれ新たなスコアとする。そこから、新たなハブスコアが高いページの出リンク先と、新たな権威スコアが高いページの入リンク元を、交互にクラスタへ追加することにする。以降、「新たなスコア(元のSALSAスコアを出入リンク数で割った値)が高いページ」のことを「スコアが高いページ」と表現する。
+
+以下の図3.9と3.10でクラスタにページを追加する様子を視覚化した。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/addpage1.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{ハブスコアによるページの追加}
+\label{figure:sample}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/addpage2.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{権威スコアによるページの追加}
+\label{figure:sample}
+\end{figure}
+
+その後、クラスタ内にあるページの各スコアを基準としてクラスタへのページの追加を終了する。
+クラスタにページを追加する際は、前に述べたように、クラスタ内でのスコアが高いページから順にリンクを辿る。ここで、リンクを辿ろうとしているページのスコアがあらかじめ設定した閾値より低くなった時、そのページ以降リンクは辿らずにページの追加を終了する。つまり、新たに追加するページは、まだどのクラスタにも所属せず、かつクラスタ内で閾値より高いスコアを持つページとリンクしている必要がある。この条件を満たすページが存在しなくなった時点でページの追加を終了し、次のクラスタの作成に移る。以下の図3.13 でページの追加を終了する時点でのクラスタの様子を視覚化した。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/finishclustering.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{ページの追加を終了する時点でのクラスタ}
+\label{figure:sample}
+\end{figure}
+
+このようにしてクラスタを作成していき、全てのページが1つのクラスタに所属した時点でクラスタリングを全て終了する。
+
+以上のことを踏まえ、クラスタリングアルゴリズムを以下に示す。
+
+\newpage
+%%%%クラスタリングアルゴリズム%%%%%%%%%%%%%%%%
+\begin{algorithm}
+\caption{クラスタリングアルゴリズム}
+\begin{algorithmic}[1]
+
+\STATE{PageList = AllPages}
+\WHILE{PageList $\neq$ empty}
+\STATE{Cluster $<<$ FindSeed}
+\STATE{Cluster $<<$ MutualPages(Seed)}
+\STATE{Cluster $<<$ InLinkPages(Seed)}
+\STATE{Cluster $<<$ OutLinkPages(Seed)}
+\STATE{CalcScore(Cluster)}
+\LOOP
+\IF{TopAuthScorePage.score $>$ 閾値}
+\STATE{Cluster $<<$ InLinkPages(TopAuthScorePage)}
+\ENDIF
+\IF{TopHubScorePage.score $>$ 閾値}
+\STATE{Cluster $<<$ OutLinkPages(TopHubScorePage)}
+\ENDIF
+\IF{TopAuthScorePage.score $<$ 閾値 $\cap$ TopHubScorePage.score $<$ 閾値}
+\STATE{break}
+\ENDIF
+\ENDLOOP
+\STATE{ClusterList $<<$ Cluster}
+\STATE{PageList = PageList - Cluster}
+\ENDWHILE
+
+\end{algorithmic}
+\end{algorithm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+1-2行目は、全てのページがクラスタに所属するまでクラスタリングを続けることを示している。まず1行目で全てのページを記憶したPageListを作成する。1つのクラスタを作成し終わるごとに、20行目でそのクラスタに含まれるページがPageListから削除される。そして、2行目が示しているように、PageListが空になるまでクラスタリングを続ける。
+
+3-6行目ではクラスタの初期セットを作成している。3行目のFindSeed関数でシードとなるページをクラスタへ追加する。ここでシードとなるページは、まだどのクラスタにも所属していない、かつPageListの中で出リンク数や入リンク数の高いものを優先して選ぶ。その後4-5行目で、seed pageと相互リンクしているページをMutualLinkPages関数、seed pageの入リンク元をInLinkPage関数、出リンク先をOutLinkPage関数により取得し、クラスタに追加する。初期セットの作成が完了すると、7行目のCalcScore関数でクラスタ内での各SALSAスコアを計算する。
+
+その後8-18行目を繰り返し、クラスタへページを追加していく。15-17行目が示すように、追加すべきページが存在しなくなるまでクラスタの拡張を続ける。
+
+追加するページを選択するのに、7行目で計算したSALSAスコアを用いる。9-11行目では、権威スコアが閾値より高いページのみ、その入リンク元となるページを追加している。TopAuthSocrePageというのは、初期セット内において権威スコアを入リンク数で割った値が最も高いページであり、.score関数によりその値を取得する。同様に12-14行目では、ハブスコアを出リンク数で割った値が閾値より高いページのみ、その出リンク先となるページを追加している。
+
+これらを繰り返してクラスタの拡張を行う。19行目でClusterListへ保存し、20行目でクラスタに追加したページをPageListから削除している。
+
+\newpage
+
+\section{最終スコアの近似}
+
+最後に、最終スコアの近似方法について解説する。この時点でクラスタリングは終了し、クラスタ内での各ページのスコア計算は終わっているものとする。
+
+クエリが与えられた後、まずクエリと関連するページ(以降クエリページと呼ぶ)が含まれるクラスタを抽出する。その後、それぞれのクラスタに対し、そのクラスタの大きさ、そのクラスタがどれだけクエリページを含んでいるかによって重み付けを行う。これは、クエリとより関連のあるクラスタでのスコアを多く採点するためである。
+
+先行研究におけるクラスタ$c$に対する重み$w_c$を以下の式(3.1)で定義する。
+
+\begin{equation}
+w_c = \frac{q}{QN_c}
+\end{equation}
+
+ここで、$q$はクラスタ$c$に含まれているクエリページの数であり、$Q$はクエリページの総数である。また、$N_c$はクラスタ$c$の総ページ数である。
+
+本研究における手法では、全てのページは1つのクラスタにのみ所属する。これは先に述べたように、多くのクラスタに所属しているページほどスコアが大きくなることを防ぐためである。それに伴い、最終スコアの近似式にも改良を加える。先行研究では分母に持ってきていたクラスタの総ページ数$N_c$を分子に持ってくる。これによって、クラスタサイズの大きいものほど大きい重みを持つことになる。
+
+本研究におけるクラスタ$c$に対する重み$w_c$を以下の式(3.2)で定義する。
+
+\begin{equation}
+w_c = \frac{qN_c}{Q}
+\end{equation}
+
+抽出した全てのクラスタに対する重みを計算した後、さらにクエリと関連の高いクラスタの抽出を行う。そして、クエリとの関連が低いクラスタは最終スコアの近似に使用しないこととする。これは、最終スコアの近似計算をするクラスタを減らすことで応答時間を減らすとともに、余計なページをランキングに追加しないためである。
+
+先行研究では、クラスタに対するクエリとの関連度に重みの平均値を用いていた。しかし、平均値を用いる手法では重みに大きくばらつきがあった際に、重みの大きなクラスタのページみがランキングに追加され、重みの小さなクラスタのページはランキングに追加されず、適切なランキングを得ることができなかった。
+
+そこで本研究では、クエリと関連の高いクラスタの抽出に中央値を用いる。中央値とは、測定値を小さい順に並べたとき，ちょうど真ん中にくる値であり、重みの両端に大きな値や小さな値があっても影響されない。また、重みがゼロのものは中央値の計算に考慮しないものとする。重みがゼロのものを除いたクラスタにおける重みの中央値$M_e$は以下の式(3.3)で定義する。
+
+\begin{equation}
+M_e =
+\begin{cases}
+\; X_m & nが奇数のとき,m = (n+1) / 2 \\
+\; (X_m + X_{m+1})/2 & nが偶数のとき,m = n/2
+\end{cases}
+\end{equation}
+
+ここで、$X$は小さい順から並べた各クラスタの重みであり、$n$は重みがゼロのクラスタを除いたクラスタの数である。
+
+次に、抽出したクラスタ内での全てのページに対して近似後の最終スコアを計算する。各ページにおけるスコアは以下の式(3.4)で定義する。
+
+\begin{equation}
+score(p,Q) = w_cs(p,c)
+\end{equation}
+
+ここで、$Q$はクエリページ集合を表し、$score(p,Q)$はクエリページ集合$Q$に対するページ$p$のスコアを表している。$s(p,c)$はクラスタ$c$におけるページ$p$のスコアである。ここで、$c$は重みが中央値より高いものとする。
+
+以下の図3.14と3.15で最終スコアを近似する流れを視覚化した。図中の円はそれぞれクラスタを表している。
+
+まず、クエリページを含むクラスタを抽出する。図3.14の例ではクラスタa,c,dが該当する。次にそれぞれのクラスタに対する重みをクラスタサイズ、クエリページの総数、クラスタに含まれるクエリページ数から計算する。その結果、重みが中央値以上だったクラスタをa,dとする。ここから、クラスタaとd内の全てのページに対し、近似後の最終スコアを計算する。最後にクエリページを含む全てのクラスタ内の全ページをソートし、ランキングを作成する。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/score1.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{クエリページが含まれるクラスタの抽出}
+\label{figure:sample}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/score2.eps,scale=1.0}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{重みが中央値以上であるクラスタの抽出}
+\label{figure:sample}
+\end{figure}
+
+\newpage
+
+以上のことを踏まえ、スコアの近似アルゴリズムを以下に示す。
+
+%%%%最終スコアの近似アルゴリズム%%%%%%%%%%%%%%%%
+\begin{algorithm}
+\caption{最終スコアの近似アルゴリズム}
+\begin{algorithmic}[1]
+
+\STATE{ClusterList = getQueryCluseter(Query)}
+\FORALL{Cluster such that Cluster $\in$ ClusterList}
+\STATE{Wight $<<$ (HaveQueryNum(Cluster) $*$ Cluster.size) $/$ Query.size}
+\ENDFOR
+\FORALL{Cluster such that Cluster $\in$ ClusterList}
+\IF{Weight[ClusterID] $\geq$ Weight.median}
+\STATE{ApproxAuthScore[PageID] = Weight[ClusterID] $*$ Cluster.AuthScore[PageID]} 
+\STATE{ApproxHubScore[PageID] = Weight[ClusterID] $*$ Cluster.HubScore[PageID]} 
+\ENDIF
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+変数Queryは、クエリページの集合である。1行目では、少なくとも1つ以上のクエリページを含むクラスタをgetQueryCluster関数により抽出し、ClusterListを作成している。
+
+2-4行目では、ClusterListの全てのクラスタに対して重みを計算している。3行目のHaveQueryNum関数により、Clusterに所属しているクエリページの数を取得し、クラスタのサイズとかけあわせ、クラスタの総ページ数で割る。計算した重みは中央値の算出と最終スコアの近似に使用するため、配列を使い全て記憶しておく。中央値は.median関数により取得する。
+
+5-9行目で最終スコアの近似を行う。5-6行目が示すように、ClusterListのうち重みが中央値以上であるクラスタのみを用いて計算を行う。7行目では、それぞれのページに対し権威スコアに重みをかけている。8行目では同様にハブスコアに重みをかけている。Cluster.AuthScoreおよびCluster.HubScoreは、それぞれ書くページにおけるクラスタ内での権威スコアとハブスコアである。ApproxAuthScoreおよぶApproxHubScoreは、それぞれ各ページにおける最終的な権威スコアとハブスコアである。
+
+最後に、近似された最終スコアをソートすることでランキングを作成し、掲示する。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{実験と考察}

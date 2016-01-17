@@ -663,8 +663,7 @@ result = Benchmark.realtime do
 				end
 			end
 
-			puts "-----------------"
-			p eval("@aScoreSortOutput#{$num}")
+			print "-"
 
 			$num += 1
 

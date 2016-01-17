@@ -13,6 +13,13 @@
 \contentsline {figure}{\numberline {3.6}{\ignorespaces クラスタへseed pageの追加}}{12}
 \contentsline {figure}{\numberline {3.7}{\ignorespaces seed pageと相互リンクしているページの追加}}{13}
 \contentsline {figure}{\numberline {3.8}{\ignorespaces seed pageの出リンク先、入リンク元であるページの追加}}{13}
+\contentsline {figure}{\numberline {3.9}{\ignorespaces 先行研究における手法での初期セット定義(最大サイズ5とした時)}}{14}
+\contentsline {figure}{\numberline {3.10}{\ignorespaces 本研究における手法での初期セット定義}}{15}
+\contentsline {figure}{\numberline {3.11}{\ignorespaces ハブスコアによるページの追加}}{16}
+\contentsline {figure}{\numberline {3.12}{\ignorespaces 権威スコアによるページの追加}}{16}
+\contentsline {figure}{\numberline {3.13}{\ignorespaces ページの追加を終了する時点でのクラスタ}}{17}
+\contentsline {figure}{\numberline {3.14}{\ignorespaces クエリページが含まれるクラスタの抽出}}{21}
+\contentsline {figure}{\numberline {3.15}{\ignorespaces 重みが中央値以上であるクラスタの抽出}}{22}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

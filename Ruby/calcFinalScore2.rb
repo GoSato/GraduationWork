@@ -53,9 +53,6 @@ def calcfinalscore
 
 		wCopy = wCopy.sort {|a, b| b <=> a }
 
-		puts "wCopy"
-		p wCopy
-
 		# 中央値の算出
 		if wCopy.size % 2 != 0
 			i = wCopy.size.to_f / 2 - 0.5
@@ -77,8 +74,6 @@ def calcfinalscore
 
 		w.size.times do |i|
 			if w[i] > average
-				puts "i"
-				puts i
 				eval("@aScoreSortOutput#{i}").each do |j|
 					newAutoritySocre[j[0]] =  j[1].to_f * w[i]
 					@finalAuthorityScore[j[0]] = @finalAuthorityScore[j[0]].to_f + newAutoritySocre[j[0]].to_f
