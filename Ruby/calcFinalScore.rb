@@ -1,13 +1,13 @@
 def calcfinalscore
 	result = Benchmark.realtime do
 
-		$rankingSize = 30
+		$rankingSize = 50
 
 		puts "-----------------"
 		puts "calFinalScore"
 
 		
-		queryPage = [5,843,1476,4562,4663,4664,4665,4666,4667,4668,4669,4670,2894,8157,8617,7376,9119,9120,9121,9122,9123,9124,9125,9126,9127,11054,16938,20241,20371,20372]
+		queryPage = [20,2801,3537,9346,243,907,2233,4750,6172,6345,6386,6960,9946,346,4567,605,9705,819,1056,6979,1169,8002,1223,4721,1623,1685,9984,1738,2036,2068]
 
 		# クラスター毎にクエリページをいくつ含むか
 		counter = []
@@ -93,7 +93,7 @@ def calcfinalscore
 		#p @finalAuthorityScore
 		#p @finalAuthorityScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }	
 		@finalAuthorityScore = @finalAuthorityScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
-		p @finalAuthorityScore
+		#p @finalAuthorityScore
 		$rankingSize.times do |i|
 			print @finalAuthorityScore[i][0].to_i
 			puts ","
@@ -104,7 +104,7 @@ def calcfinalscore
 		#p @finalHubScore
 		#p @finalHubScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }	
 		@finalHubScore = @finalHubScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
-		p @finalHubScore
+		#p @finalHubScore
 		$rankingSize.times do |i|
 			print @finalHubScore[i][0].to_i
 			puts ","

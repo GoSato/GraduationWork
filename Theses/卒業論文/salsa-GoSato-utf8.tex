@@ -629,6 +629,177 @@ response = \frac{q}{p} \times 100
 ここでpは従来のSALSAアルゴリズムにおける応答時間であり、qは前処理を行った高速化SALSAアルゴリズムの応答時間である。従来のSALSAアルゴリズムの応答時間を100$\%$とした時、提案手法の応答時間がどれだけ短くなっているかを表している。
 
 \section{実データでの実験}
+
+今回提案した手法による実験を、Jure LeskovecとAndrej Krevlによって構築されたデータベース、「SNAP Datasets: Stanford Large Network Dataset Collection」で提供されているデータを用いて行った。今回使用するデータを以下の表4.1に示す。
+
+\begin{table}[htb]
+\begin{center}
+\caption{実験に使用するデータ}
+\begin{tabular}{|c|c|} \hline
+    WEBページの数 & 6,301 \\ \hline
+    リンクの数 & 20,777 \\  \hline
+    クエリページの数 & 30 \\ \hline
+    ランキングサイズ & 50\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+まずはじめに、今回の目的である精度の改善が達成されたかどうかを調べるため、条件を1つずつ変えて実験を行った。以下の表4.2にその条件を示す。
+
+\begin{table}[htb]
+\begin{center}
+\caption{それぞれの提案手法における条件}
+\begin{tabular}{|c||c|c|c|c|c|} \hline 
+    & 先行研究 & 提案手法1 & 提案手法2 & 提案手法3 & 提案手法4\\ \hline \hline
+    クラスタリングの重複 & 有り & 無し & 有り & 有り & 無し \\  \hline
+    関連度の判定 & 平均値 & 平均値 & 中央値 & 平均値 & 中央値 \\ \hline
+    近似式 & 式(3.1) & 式(3.1) & 式(3.1) & 式(3.2) & 式(3.2) \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+提案手法1から3は、先行研究に対して1つずつ条件を変えたものであり、提案手法4は全ての条件を変えたものである。
+
+表4.3に先行研究での実験結果を、表4.4から4.7に提案手法での実験結果を示す。
+
+\begin{table}[htb]
+\begin{center}
+\caption{先行研究の手法における実験結果}
+\begin{tabular}{|c||c|c|c|} \hline 
+    スコア閾値 & 0.5 & 0.05 & 0.005 \\ \hline \hline
+    応答時間(\%) & 2.65 & 5.23 & 6.76 \\  \hline
+    権威適合率 & 0.32 & 0.32 & 0.2 \\ \hline
+    ハブ適合率 & 0.18 & 0.12 & 0.1 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[htb]
+\begin{center}
+\caption{提案手法1における実験結果}
+\begin{tabular}{|c||c|c|c|} \hline 
+    スコア閾値 & 0.5 & 0.05 & 0.005 \\ \hline \hline
+    応答時間(\%) & 2.60 & 0.59 & 0.33 \\  \hline
+    権威適合率 & 0.34 & 0.46 & 0.2 \\ \hline
+    ハブ適合率 & 0.18 & 0.14 & 0.02 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[htb]
+\begin{center}
+\caption{提案手法2における実験結果}
+\begin{tabular}{|c||c|c|c|} \hline 
+    スコア閾値 & 0.5 & 0.05 & 0.005 \\ \hline \hline
+    応答時間(\%) & 2.90 & 4.90 & 6.06 \\  \hline
+    権威適合率 & 0.32 & 0.3 & 0.2 \\ \hline
+    ハブ適合率 & 0.18 & 0.12 & 0.1 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[htb]
+\begin{center}
+\caption{提案手法3における実験結果}
+\begin{tabular}{|c||c|c|c|} \hline 
+    スコア閾値 & 0.5 & 0.05 & 0.005 \\ \hline \hline
+    応答時間(\%) & 2.80 & 5.60 & 7.43 \\  \hline
+    権威適合率 & 0.72 & 0.62 & 0.48 \\ \hline
+    ハブ適合率 & 0.48 & 0.18 & 0.3 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[htb]
+\begin{center}
+\caption{提案手法4における実験結果}
+\begin{tabular}{|c||c|c|c|} \hline 
+    スコア閾値 & 0.5 & 0.05 & 0.005 \\ \hline \hline
+    応答時間(\%) & 2.50 & 0.51 & 0.33 \\  \hline
+    権威適合率 & 0.68 & 0.46 & 0.24 \\ \hline
+    ハブ適合率 & 0.46 & 0.14 & 0.14 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+まず応答時間に関して、いずれの条件においても先行研究と同程度、かつ従来のSALSAアルゴリズムに比べて高速化に成功することができた。以下の図4.1は、それぞれの提案手法における応答時間をグラフ化したものである。先行研究における手法では、閾値が小さくなるにしたがって応答時間が増加するのに対し、提案手法1と4では、閾値が小さくなるにしたがって応答時間が減少した。これは、クラスタリングの重複を禁止することで1度クラスタに追加されたページは再度クラスタリングの対象にならないためであると考えられる。また、クラスタリングにかかる処理時間も削減された。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/response.eps,scale=1.7}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{閾値による応答時間の変化}
+\label{figure:sample}
+\end{figure}
+
+\clearpage
+
+次に、ランキングの精度に関しては、先行研究における手法と比べると提案手法3と4において改善が認められた。以下の図4.2と4.3は、表4.3から4.7における権威適合率およびハブ適合率をそれぞれグラフ化したものである。
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/auth.eps,scale=1.7}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{権威適合率における実験結果}
+\label{figure:sample}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/hub.eps,scale=1.7}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{ハブ適合率における実験結果}
+\label{figure:sample}
+\end{figure}
+
+グラフからもわかるように、閾値が0.5のとき提案手法3と4は、先行研究における手法に対して権威適合率、ハブ適合率ともに最も高い数値を出すことができた。一方で提案手法1と2では、先行研究における手法と比べてあまり改善が認められなかった。また、提案手法の適合率において、権威ランキングのほうがハブランキングよりも精度の高いものとなっている。これは、使用したデータにおいて各ページにおける出リンク数に偏りが小さく、ハブスコアに差が出なかったためと考えられる。
+
+権威ランキング、ハブランキングともに提案手法3と4を用いて、閾値を0.5に設定した場合に最も従来のSALSAアルゴリズムに近いランキングを作成することができた。速度に関しては提案手法1と4を用いた時に、最も高速な処理ができるが、いずれの提案手法を用いても従来のSALSAアルゴリズムと比べて十分な高速化をすることができた。
+
+\clearpage
+
+\begin{table}[htb]
+\begin{center}
+\caption{5種類の実データ}
+\begin{tabular}{|c||c|c|c|c|c|} \hline
+    & データ1 & データ2 & データ3 & データ4 & データ5 \\ \hline \hline
+    WEBページの数 & 8,641 & 6,301 & 10,000 & 62,586 & 875,713 \\ \hline
+    リンクの数 & 10,000 & 20,777 & 60,000 & 147,892 & 5,105,039 \\  \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{table}[htb]
+\begin{center}
+\caption{手法3における条件}
+\begin{tabular}{|c||c|c|c|} \hline 
+    & 手法3 & 手法3-1 & 手法3-2 \\ \hline \hline
+    クラスタリングの重複 & 有り & 無し & 有り \\  \hline
+    関連度の判定 & 平均値 & 平均値 & 中央値 \\ \hline
+    近似式 & 式(3.2) & 式(3.2) & 式(3.2) \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
 \section{大規模データでの実験}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -702,7 +873,8 @@ http://oku.edu.mie-u.ac.jp/\textasciitilde{}okumura/texwiki/
 \chapter*{謝辞}
 \addcontentsline{toc}{chapter}{\numberline{}謝辞}
 
-感謝
+本研究を進めるにあたり、ご指導を頂いた卒業論文指導教員の古瀬一隆先生と陳漢雄先生に感謝致します。
+また、研究室での議論を通じて多くの刺激や示唆を頂いたDSE研究室の皆様に感謝致します。
 
 \newpage
 

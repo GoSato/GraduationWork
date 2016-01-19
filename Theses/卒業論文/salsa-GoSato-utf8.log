@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015) (preloaded format=platex 2016.1.10)  18 JAN 2016 09:53
+This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015) (preloaded format=platex 2016.1.10)  19 JAN 2016 09:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -234,6 +234,15 @@ LaTeX Warning: Label `figure:sample' multiply defined.
 
 LaTeX Warning: Label `figure:sample' multiply defined.
 
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
 )
 \openout1 = `salsa-GoSato-utf8.aux'.
 
@@ -374,32 +383,43 @@ File: image/score2.eps Graphic file (type eps)
 [24
 
 ]
+File: image/response.eps Graphic file (type eps)
+ <image/response.eps> [25] [26] [27]
+File: image/auth.eps Graphic file (type eps)
+ <image/auth.eps>
+File: image/hub.eps Graphic file (type eps)
+ <image/hub.eps>
+[28
+
+] [29] [30
+
+]
 第 5 章
-[25
+[31
 
 ]
 第 6 章
 (I search kanjifont definition file: . . ) (I search font definition file: . .
 . . . . . )
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 646.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 817.
 
  (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-[26
+[32
 
-] [27] [28
+] [33] [34
 
 ]
 
 LaTeX Font Warning: Font shape `JT1/gt/m/it' undefined
-(Font)              using `JT1/gt/m/n' instead on input line 730.
+(Font)              using `JT1/gt/m/n' instead on input line 902.
 
 
 LaTeX Font Warning: Font shape `JY1/gt/m/it' undefined
-(Font)              using `JY1/gt/m/n' instead on input line 730.
+(Font)              using `JY1/gt/m/n' instead on input line 902.
 
-[29
+[35
 
 ] (./salsa-GoSato-utf8.aux)
 
@@ -410,12 +430,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 2096 strings out of 493742
- 25455 string characters out of 6151252
- 85958 words of memory out of 5000000
- 5561 multiletter control sequences out of 15000+600000
+ 2102 strings out of 493742
+ 25527 string characters out of 6151252
+ 92958 words of memory out of 5000000
+ 5564 multiletter control sequences out of 15000+600000
  21285 words of font info for 77 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
  32i,7n,26p,608b,630s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on salsa-GoSato-utf8.dvi (33 pages, 72120 bytes).
+Output written on salsa-GoSato-utf8.dvi (39 pages, 85908 bytes).
