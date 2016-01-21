@@ -764,112 +764,104 @@ response = \frac{q}{p} \times 100
 
 \clearpage
 
+\section{大小異なるデータでの実験}
+
+今回提案した手法による実験を、大小さまざまなデータを使用して行った。用意したデータは「SNAP Datasets: Stanford Large Network Dataset Collection」で提供されているデータのうち、ページ数が6,301から62,586、リンク数が10,000から147,892のものである。以下の表4.8に4種類のデータを示す。
+
 \begin{table}[htb]
 \begin{center}
-\caption{5種類の実データ}
+\caption{4種類の実データ}
 \begin{tabular}{|c||c|c|c|c|c|} \hline
-    & データ1 & データ2 & データ3 & データ4 & データ5 \\ \hline \hline
-    WEBページの数 & 8,641 & 6,301 & 10,000 & 62,586 & 875,713 \\ \hline
-    リンクの数 & 10,000 & 20,777 & 60,000 & 147,892 & 5,105,039 \\  \hline
+    & データ1 & データ2 & データ3 & データ4 \\ \hline \hline
+    WEBページの数 & 8,641 & 10,000 & 62,586 & 875,713 \\ \hline
+    リンクの数 & 10,000 & 60,000 & 147,892 & 5,105,039 \\  \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-
-
-
-
-
-
-
-
-
-
+実験の条件として、4.2節の結果から閾値は0.5とし、提案手法3と4を使用して先行研究における手法との比較を行う。以下の表4.9と図4.4にデータ1での実験結果、表4.10と図4.5にデータ2での実験結果、表4.11と図4.6にデータ3での実験結果を示す。
 
 \begin{table}[htb]
 \begin{center}
-\caption{手法3における条件}
+\caption{データ1における実験結果}
 \begin{tabular}{|c||c|c|c|} \hline 
-    & 手法3 & 手法3-1 & 手法3-2 \\ \hline \hline
-    クラスタリングの重複 & 有り & 無し & 有り \\  \hline
-    関連度の判定 & 平均値 & 平均値 & 中央値 \\ \hline
-    近似式 & 式(3.2) & 式(3.2) & 式(3.2) \\ \hline
+    & 先行研究 & 提案手法3 & 提案手法4 \\ \hline \hline
+    応答時間(\%) & 35.35 & 39.59 & 33.89 \\  \hline
+    権威適合率 & 0.9 & 0.9 & 0.68 \\ \hline
+    ハブ適合率 & 0.78 & 0.82 & 0.64 \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
 
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/data1.eps,scale=1.7}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{データ1における実験結果}
+\label{figure:sample}
+\end{figure}
 
+\begin{table}[htb]
+\begin{center}
+\caption{データ2における実験結果}
+\begin{tabular}{|c||c|c|c|} \hline 
+    & 先行研究 & 提案手法3 & 提案手法4 \\ \hline \hline
+    応答時間(\%) & 5.03 & 5.31 & 4.85 \\  \hline
+    権威適合率 & 0.44 & 0.36 & 0.32 \\ \hline
+    ハブ適合率 & 0.26 & 0.36 & 0.3 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
 
-\section{大規模データでの実験}
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/data2.eps,scale=1.7}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{データ2における実験結果}
+\label{figure:sample}
+\end{figure}
+
+\begin{table}[htb]
+\begin{center}
+\caption{データ3における実験結果}
+\begin{tabular}{|c||c|c|c|} \hline 
+    & 先行研究 & 提案手法3 & 提案手法4 \\ \hline \hline
+    応答時間(\%) & 15.25 & 13.72 & 11.37 \\  \hline
+    権威適合率 & 0.5 & 0.56 & 0.78 \\ \hline
+    ハブ適合率 & 0.44 & 0.56 & 0.46 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{figure}[htbp]
+\begin{center}
+%\includegraphics[width=3cm]{sample.eps}
+\psfig{file=image/data3.eps,scale=1.7}
+%\epsfile{file=sample.eps,scale=0.6}
+\end{center}
+\caption{データ3における実験結果}
+\label{figure:sample}
+\end{figure}
+
+大小異なるデータにおいても、節4.2で使用したデータと同じく、応答時間を大幅に短くすることができた。その効果はデータサイズが大きければ大きいほど顕著に現れる。精度に関しては多少のバラつきはあるものの、多くの場合において提案手法3、または提案手法4を用いることで先行研究における手法に比べて高い適合率を得ることがきた。最も大きいデータサイズであるデータ3において、提案手法4を使用した時に最も高い権威適合率0.78を、提案手法3を使用した時に最も高いハブ適合率0.56を得ることができた。しかし、データ2においては先行研究における手法のほうが、提案手法に比べてより高い権威適合率を得る結果となった。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{まとめ}
 
-てすてす
+本論文では、SALSAアルゴリズムの高速化での課題点であったランキング精度の改善を目的とし、その原因となっていたクラスタリング、および最終スコアの近似式について着目した。そして、各WEBページは1つのクラスタにのみ所属するものとし、重み付けを行う際のクエリページとクラスタとの関連度の測定に中央値を用いることにより、従来のSALSAアルゴリズムよりも高速かつ、精度の高いWEBランキングを作成する手法を提案した。また、最終スコアの近似の際に、各クラスタのサイズに関係した重み付けを行った。
+
+第4章の実験結果から、権威ランキング、ハブランキングともに精度の改善が認められた。実データでの実験において、権威適合率では平均0.69、ハブ適合率では平均0.55を記録することができた。また、応答時間も従来のSALSAアルゴリズムと比べておよそ1/20程度まで高速化することができた。
+
+
+未完了
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{形式}
-
-ここでは、論文の表紙および本体の記述方法について述べる。
-
-\section{表紙}
-
-表紙は、{\tt $\backslash$maketitle} によって作成するため、以下の項目に相
-当する文字列をそれぞれ記述する。
-
-\begin{description} \parskip=1pt
-\item{題目: }
-題目は{\tt $\backslash$title} に記述する。行替えを行う場合は$\backslash$
-	   $\backslash$ を入力する。ただし、題目の最後に$\backslash$
-	   $\backslash$ を入力するとコンパイルが通らなくなるので注意する。
-	   なお、4行以上の題目の場合、表紙ページがあふれるためスタイルファ
-	   イル``mast-jp-sjis.sty''を変更する必要がある。
-\item{著者名: }
-著者名は{\tt $\backslash$author} に記述する。
-\item{指導教員名: }
-指導教教員は{\tt $\backslash$advisor} に記述する。
-\item{年月: }
-年月は{\tt $\backslash$yearandmonth} に記述する。年月は提出時のものを記述すること。
-\end{description}
-
-\section{本体}
-
-本体は1段組で記述する。
-
-図表には番号と説明(caption)を付け、文章中で参照する。表
-\ref{table:fundamental_data_type}と図\ref{figure:sample}はそれぞれ表と図
-の例である。表の説明は上に、図の説明は下に書くことが多い。図の挿入に用い
-るパッケージについては使用環境に合わせて自由に選択してほしい。
-
-\begin{table}[hbt]
-\caption{表の例}
-\label{table:fundamental_data_type}
-\begin{center}
-\begin{tabular}{| c | r | r | r | r |}
-\hline
-年 度 & 1年次 & 2年次 & 3年次 & 4年次 \\
-\hline
-1995 & 85 & 92 & 86 & 88 \\
-1996 & 83 & 89 & 90 & 102 \\
-1997 & 88 & 87 & 91 & 112 \\
-1998 & 144 & 93 & 90 & 115 \\
-\hline 
-\end{tabular}
-\end{center}
-\end{table}
-\medskip
-
-
-詳しくは参考書\cite{okumura2010,yoshinaga2009}などを参照のこと。
-また、奥村晴彦氏の「\TeX Wiki」
-http://oku.edu.mie-u.ac.jp/\textasciitilde{}okumura/texwiki/
-は、日本語の\TeX に関する情報が充実している。
-また、具体的な論文としての文献参照例として
-(本の例)\cite{ware2004}、
-(雑誌論文の例)\cite{meyer2009}、
-(予稿集の例)\cite{hill2010}
-を挙げておく。
-
 \chapter*{謝辞}
 \addcontentsline{toc}{chapter}{\numberline{}謝辞}
 
@@ -889,8 +881,8 @@ http://oku.edu.mie-u.ac.jp/\textasciitilde{}okumura/texwiki/
 
 %% 参考文献を直接ファイルに含めて書く場合
 \begin{thebibliography}{1}
-\bibitem{okumura2010}
-奥村晴彦, LaTeX2e美文書作成入門 改訂第5版, 技術評論社, 2010年.
+\bibitem{google}
+Amy N.Langville, Carl D.Meyer. Google PageRank の数理: 最強検索エンジンの ランキング手法を求めて. 岩野和生, 黒川利明, 黒川洋訳. 共立出版, 2009, 296p.
 
 \bibitem{yoshinaga2009}
 吉永徹美, LaTeX2ε辞典, 翔泳社, 2009年.
