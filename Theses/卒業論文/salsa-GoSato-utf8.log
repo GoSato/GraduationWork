@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015) (preloaded format=platex 2016.1.10)  20 JAN 2016 14:40
+This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015) (preloaded format=platex 2016.1.10)  24 JAN 2016 19:21
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -330,11 +330,11 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20.74> not available
 ] [2]
 第 2 章
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 116.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 115.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 116.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 115.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 116.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 115.
 File: image/webgraph.eps Graphic file (type eps)
 <image/webgraph.eps> [3
 
@@ -355,7 +355,7 @@ File: image/query2.eps Graphic file (type eps)
  <image/query2.eps>
 File: image/query3.eps Graphic file (type eps)
  <image/query3.eps>
-Overfull \hbox (18.0675pt too wide) in paragraph at lines 310--312
+Overfull \hbox (18.0675pt too wide) in paragraph at lines 309--311
  [] 
  []
 
@@ -392,24 +392,24 @@ File: image/score2.eps Graphic file (type eps)
 [24
 
 ]
-File: image/response.eps Graphic file (type eps)
- <image/response.eps> [25] [26] [27]
-File: image/auth.eps Graphic file (type eps)
- <image/auth.eps>
-File: image/hub.eps Graphic file (type eps)
- <image/hub.eps>
-[28
+File: image/response01.eps Graphic file (type eps)
+ <image/response01.eps> [25] [26] [27]
+File: image/auth01.eps Graphic file (type eps)
+ <image/auth01.eps>
+File: image/hub01.eps Graphic file (type eps)
+
+<image/hub01.eps> [28
 
 ] [29]
-File: image/data1.eps Graphic file (type eps)
- <image/data1.eps>
-File: image/data2.eps Graphic file (type eps)
- <image/data2.eps>
-File: image/data3.eps Graphic file (type eps)
- <image/data3.eps> [30
+File: image/data01.eps Graphic file (type eps)
+ <image/data01.eps>
+File: image/data02.eps Graphic file (type eps)
+ <image/data02.eps>
+File: image/data03.eps Graphic file (type eps)
 
-] [31]
-[32]
+<image/data03.eps> [30
+
+] [31] [32]
 第 5 章
 [33
 
@@ -418,11 +418,11 @@ File: image/data3.eps Graphic file (type eps)
 ]
 
 LaTeX Font Warning: Font shape `JT1/gt/m/it' undefined
-(Font)              using `JT1/gt/m/n' instead on input line 894.
+(Font)              using `JT1/gt/m/n' instead on input line 895.
 
 
 LaTeX Font Warning: Font shape `JY1/gt/m/it' undefined
-(Font)              using `JY1/gt/m/n' instead on input line 894.
+(Font)              using `JY1/gt/m/n' instead on input line 895.
 
 [35
 
@@ -435,12 +435,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 2065 strings out of 493742
- 25009 string characters out of 6151252
+ 2064 strings out of 493742
+ 25014 string characters out of 6151252
  92958 words of memory out of 5000000
- 5536 multiletter control sequences out of 15000+600000
+ 5535 multiletter control sequences out of 15000+600000
  21069 words of font info for 76 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
  32i,7n,26p,608b,630s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on salsa-GoSato-utf8.dvi (39 pages, 88844 bytes).
+Output written on salsa-GoSato-utf8.dvi (39 pages, 89860 bytes).

@@ -74,7 +74,7 @@ SALSAアルゴリズムはクエリ依存型のリンク解析手法であり、
 
 先行研究では、SALSAアルゴリズムの一部をクエリが与えられる前に処理することで高速化を図る手法が提案された。従来のSALSAアルゴリズムに比べて高速化することに成功したものの、ランキング精度においては著しく低い結果となり、クエリに適した検索結果が得られるというクエリ依存型リンク解析手法の長所が失われてしまった。そこで、本論文では先行研究の手法を改善し、ランキング精度を保ちつつ、高速化を行う手法を提案する。
 
-本研究では、クエリ依存型リンク解析手法SALSAにおいて、クエリに適した検索結果が得られるという長所を保ちつつ、検索の高速化を行う手法を提案する。
+本研究では、クエリ依存型リンク解析手法SALSAにおいて、クエリに適した検索結果が得られるという長所を保ちつつ、検索の高速化を行うことを目的とする。
 
 %%%%%
 \par
@@ -104,7 +104,8 @@ PageRankアルゴリズムは、検索キーワードに依存せずスコア計
 
 この問題の解決策として、クエリ依存型リンク解析手法において時間のかかるスコア計算を前処理化することで、応答時間を減らすという手法が過去に提案された。これらの手法では、検索キーワードが与えられる前にあらかじめWEBページのクラスタリングを行い、クラスタ内での各ページのスコア計算を行う。検索キーワードが与えられた後は、そのクラスタとスコアを用いて結果を近似し、WEBランキングを作成する。しかし、これらの手法では近似したスコアと本来のSALSAアルゴリズムによるスコアが大きく異るため、応答時間は早くなるがランキング精度が下がる結果となった。
 
-そこで本研究では、クエリ依存型リンク解析手法SALSAにおいて、あらかじめ全てのページに対して全てのページが1つのクラスタに所属するまでSALSAスコアを用いたクラスタリングを行う。その後、クエリが与えられてからクエリと関連するクラスタを抽出し、近似式を用いて最終的なランキングを作成することで、従来のSALSAアルゴリズムにより近いWEBランキングを作成することができ、かつ検索にかかる応答時間の少ない手法を提案する。
+そこで本研究では、クエリ依存型リンク解析手法SALSAの前処理化におけるクラスタリングとスコア近似を改善することで、従来のSALSAアルゴリズムにより近いWEBランキングを作成することができ、かつ応答時間の少ない手法を提案する。
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -116,7 +117,7 @@ PageRankアルゴリズムは、検索キーワードに依存せずスコア計
 
 巨大化したWEBの中から目的のWEBページを見つけるには、検索エンジンを使うのが有効である。検索エンジンに与えた検索キーワード、別名クエリと関連のあるページに対して順位付けをするのがWEBランキングアルゴリズムである。
 
-1998年までWEBランキングアルゴリズムは、WEBページのテキストやHTML構造といった内容得点で順位付けを行っていた。この内容得点というのは、以下の図2.1のように各WEBページにどこにどれほどクエリの文字列が含まれているのか計算したものであった。しかし、WEBが巨大化し限りなく増大していったことや、内容得点がスパムの影響を受けやすかったことから、1998年までには従来の内容得点は有効でないことが明らかになっていた。
+1998年までWEBランキングアルゴリズムは、WEBページのテキストやHTML構造といった内容得点で順位付けを行っていた。この内容得点というのは、各WEBページにどこにどれほどクエリの文字列が含まれているのか計算したものであった。しかし、WEBが巨大化し限りなく増大していったことや、内容得点がスパムの影響を受けやすかったことから、1998年までには従来の内容得点は有効でないことが明らかになっていた。
 
 そこで、内容得点だけではなく、WEBのハイパーリンク構造に対して有向グラフを作成し、その有向グラフを用いてWEBページの人気得点を計算するリンク解析手法が登場した。
 
@@ -158,12 +159,12 @@ PageRankのスコア計算は以下の式(2.1)で定義される。
 \end{equation}
 
 ここで$\pi^T$はPageRankベクトルであり、$\alpha$は0.85程度のスカラー値であり、行列$S$はページ$i$から
-そのリンク先であるページ$j$への遷移確率行列である。また行列$E$は全てのWEBページヘのテレポーテーション行列である。
+そのリンク先であるページ$j$への遷移確率行列である。また行列$E$は全てのWEBページヘのレポーテーション行列である。
 
 ここで行列$S$は、ページ$i$からそのリンク先ページ$j$への遷移確率を示すので以下のように定義することができる。
 
 \begin{equation}
-S_{(i,j)} =
+S_(i,j) =
 \begin{cases}
 \; 1/out(i)　(out(i)はノードiの出リンク数) \\
 \; 0　(ノードiからノードjへのリンクがないとき)
@@ -173,7 +174,7 @@ S_{(i,j)} =
 また、行列$E$はページ$i$から全てのページへのランダムな遷移を示すので、以下(2.3)のように定義することができる。
 
 \begin{equation}
-E_{(i,j)} = 1
+E_(i,j) = 1
 \end{equation}
 
 PageRankの特徴の1つとして、クエリ独立型のリンク解析手法であるという点が挙げられる。
@@ -288,7 +289,7 @@ SALSAもHITSと同様に、クエリが与えられてからbase setの作成と
 
 以下の図3.2はクエリ依存型リンク解析手法における処理の流れを視覚化したものである。クエリ依存型リンク解析手法では、WEBページの集合からクエリに関連する部分をbase setとして抽出し、抽出されたWEBページの権威スコア、ハブスコアを計算し、ランキングを表示する。クエリが与えられてからbase setの作成、各スコアの計算を行うため長い応答時間がかかってしまう。
 
-そこで、先行研究では、WEBグラフの抽出と各スコアの計算を前処理化することでクエリが与えられてからのランキング作成を高速化する手法が提案された。具体的に、高速化とはクエリが与えられてから検索結果であるWEBランキングを出力するまでにかかる応答時間を短縮することを指す。この手法では、あらかじめWEBグラフをクラスタリングしておき、各クラスタ内でのWEBページに対して権威スコアとハブスコアを計算しておく。その後、クエリが与えられるとクエリに関連するWEBページを含むクラスタを抽出し、そこからクラスタ内での各WEBページのスコアを元に最終的なスコアを近似する。
+そこで、先行研究では、WEBグラフの抽出と各スコアの計算を前処理化することでクエリが与えられてからのランキング作成を高速化する手法が提案された。この手法では、あらかじめWEBグラフをクラスタリングしておき、各クラスタ内でのWEBページに対して権威スコアとハブスコアを計算しておく。その後、クエリが与えられるとクエリに関連するWEBページを含むクラスタを抽出し、そこからクラスタ内での各WEBページのスコアを元に最終的なスコアを近似する。
 
 \begin{figure}[htbp]
 \begin{center}
@@ -467,9 +468,7 @@ SALSAもHITSと同様に、クエリが与えられてからbase setの作成と
 
 \STATE{PageList = AllPages}
 \WHILE{PageList $\neq$ empty}
-\STATE{Cluster = $\phi$}
-\STATE{Seed = FindSeed}
-\STATE{Cluster $<<$ Seed}
+\STATE{Cluster $<<$ FindSeed}
 \STATE{Cluster $<<$ MutualPages(Seed)}
 \STATE{Cluster $<<$ InLinkPages(Seed)}
 \STATE{Cluster $<<$ OutLinkPages(Seed)}
@@ -495,13 +494,13 @@ SALSAもHITSと同様に、クエリが与えられてからbase setの作成と
 
 1-2行目は、全てのページがクラスタに所属するまでクラスタリングを続けることを示している。まず1行目で全てのページを記憶したPageListを作成する。1つのクラスタを作成し終わるごとに、20行目でそのクラスタに含まれるページがPageListから削除される。そして、2行目が示しているように、PageListが空になるまでクラスタリングを続ける。
 
-3-9行目ではクラスタの初期セットを作成している。3行目でSeedを初期化し、4行目のFindSeed関数でシードとなるページを変数Seedに格納する。５行目でSeedをクラスタへ追加する。ここでシードとなるページは、まだどのクラスタにも所属していない、かつPageListの中で出リンク数や入リンク数の高いものを優先して選ぶ。その後6-8行目で、seed pageと相互リンクしているページをMutualLinkPages関数、seed pageの入リンク元をInLinkPage関数、出リンク先をOutLinkPage関数により取得し、クラスタに追加する。初期セットの作成が完了すると、9行目のCalcScore関数でクラスタ内での各SALSAスコアを計算する。
+3-6行目ではクラスタの初期セットを作成している。3行目のFindSeed関数でシードとなるページをクラスタへ追加する。ここでシードとなるページは、まだどのクラスタにも所属していない、かつPageListの中で出リンク数や入リンク数の高いものを優先して選ぶ。その後4-5行目で、seed pageと相互リンクしているページをMutualLinkPages関数、seed pageの入リンク元をInLinkPage関数、出リンク先をOutLinkPage関数により取得し、クラスタに追加する。初期セットの作成が完了すると、7行目のCalcScore関数でクラスタ内での各SALSAスコアを計算する。
 
-その後10-20行目を繰り返し、クラスタへページを追加していく。17-19行目が示すように、追加すべきページが存在しなくなるまでクラスタの拡張を続ける。
+その後8-18行目を繰り返し、クラスタへページを追加していく。15-17行目が示すように、追加すべきページが存在しなくなるまでクラスタの拡張を続ける。
 
-追加するページを選択するのに、9行目で計算したSALSAスコアを用いる。11-13行目では、権威スコアが閾値より高いページのみ、その入リンク元となるページを追加している。TopAuthSocrePageというのは、初期セット内において権威スコアを入リンク数で割った値が最も高いページであり、.score関数によりその値を取得する。同様に14-16行目では、ハブスコアを出リンク数で割った値が閾値より高いページのみ、その出リンク先となるページを追加している。
+追加するページを選択するのに、7行目で計算したSALSAスコアを用いる。9-11行目では、権威スコアが閾値より高いページのみ、その入リンク元となるページを追加している。TopAuthSocrePageというのは、初期セット内において権威スコアを入リンク数で割った値が最も高いページであり、.score関数によりその値を取得する。同様に12-14行目では、ハブスコアを出リンク数で割った値が閾値より高いページのみ、その出リンク先となるページを追加している。
 
-これらを繰り返してクラスタの拡張を行う。21行目でClusterListへ保存し、22行目でクラスタに追加したページをPageListから削除している。
+これらを繰り返してクラスタの拡張を行う。19行目でClusterListへ保存し、20行目でクラスタに追加したページをPageListから削除している。
 
 \newpage
 
@@ -584,9 +583,9 @@ score(p,Q) = w_cs(p,c)
 \caption{最終スコアの近似アルゴリズム}
 \begin{algorithmic}[1]
 
-\STATE{ClusterList = getQueryCluster(Query)}
+\STATE{ClusterList = getQueryCluseter(Query)}
 \FORALL{Cluster such that Cluster $\in$ ClusterList}
-\STATE{Weight $<<$ (HaveQueryNum(Cluster) $*$ Cluster.size) $/$ Query.size}
+\STATE{Wight $<<$ (HaveQueryNum(Cluster) $*$ Cluster.size) $/$ Query.size}
 \ENDFOR
 \FORALL{Cluster such that Cluster $\in$ ClusterList}
 \IF{Weight[ClusterID] $\geq$ Weight.median}
@@ -602,7 +601,7 @@ score(p,Q) = w_cs(p,c)
 
 2-4行目では、ClusterListの全てのクラスタに対して重みを計算している。3行目のHaveQueryNum関数により、Clusterに所属しているクエリページの数を取得し、クラスタのサイズとかけあわせ、クラスタの総ページ数で割る。計算した重みは中央値の算出と最終スコアの近似に使用するため、配列を使い全て記憶しておく。中央値は.median関数により取得する。
 
-5-9行目で最終スコアの近似を行う。ClusterID、PageIDはそれぞれクラスタの識別番号、ページの識別番号である。5-6行目が示すように、ClusterListのうち重みが中央値以上であるクラスタのみを用いて計算を行う。7行目では、それぞれのページに対し権威スコアに重みをかけている。8行目では同様にハブスコアに重みをかけている。Cluster.AuthScoreおよびCluster.HubScoreは、それぞれ書くページにおけるクラスタ内での権威スコアとハブスコアである。ApproxAuthScoreおよぶApproxHubScoreは、それぞれ各ページにおける最終的な権威スコアとハブスコアである。
+5-9行目で最終スコアの近似を行う。5-6行目が示すように、ClusterListのうち重みが中央値以上であるクラスタのみを用いて計算を行う。7行目では、それぞれのページに対し権威スコアに重みをかけている。8行目では同様にハブスコアに重みをかけている。Cluster.AuthScoreおよびCluster.HubScoreは、それぞれ書くページにおけるクラスタ内での権威スコアとハブスコアである。ApproxAuthScoreおよぶApproxHubScoreは、それぞれ各ページにおける最終的な権威スコアとハブスコアである。
 
 最後に、近似された最終スコアをソートすることでランキングを作成し、掲示する。
 
@@ -728,7 +727,7 @@ response = \frac{q}{p} \times 100
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=image/response01.eps,scale=1.7}
+\psfig{file=image/response.eps,scale=1.7}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{閾値による応答時間の変化}
@@ -742,7 +741,7 @@ response = \frac{q}{p} \times 100
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=image/auth01.eps,scale=1.7}
+\psfig{file=image/auth.eps,scale=1.7}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{権威適合率における実験結果}
@@ -752,7 +751,7 @@ response = \frac{q}{p} \times 100
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=image/hub01.eps,scale=1.7}
+\psfig{file=image/hub.eps,scale=1.7}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{ハブ適合率における実験結果}
@@ -765,9 +764,9 @@ response = \frac{q}{p} \times 100
 
 \clearpage
 
-\section{サイズの異なるデータでの実験}
+\section{大小異なるデータでの実験}
 
-今回提案した手法による実験を、サイズの異なるデータを使用して行った。用意したデータは「SNAP Datasets: Stanford Large Network Dataset Collection」で提供されているデータのうち、ページ数が6,301から62,586、リンク数が10,000から147,892のものである。以下の表4.8に4種類のデータを示す。
+今回提案した手法による実験を、大小さまざまなデータを使用して行った。用意したデータは「SNAP Datasets: Stanford Large Network Dataset Collection」で提供されているデータのうち、ページ数が6,301から62,586、リンク数が10,000から147,892のものである。以下の表4.8に4種類のデータを示す。
 
 \begin{table}[htb]
 \begin{center}
@@ -797,7 +796,7 @@ response = \frac{q}{p} \times 100
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=image/data01.eps,scale=1.7}
+\psfig{file=image/data1.eps,scale=1.7}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{データ1における実験結果}
@@ -819,7 +818,7 @@ response = \frac{q}{p} \times 100
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=image/data02.eps,scale=1.7}
+\psfig{file=image/data2.eps,scale=1.7}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{データ2における実験結果}
@@ -841,7 +840,7 @@ response = \frac{q}{p} \times 100
 \begin{figure}[htbp]
 \begin{center}
 %\includegraphics[width=3cm]{sample.eps}
-\psfig{file=image/data03.eps,scale=1.7}
+\psfig{file=image/data3.eps,scale=1.7}
 %\epsfile{file=sample.eps,scale=0.6}
 \end{center}
 \caption{データ3における実験結果}

@@ -12,7 +12,7 @@
 \contentsline {chapter}{\numberline {第4章}実験と考察}{24}
 \contentsline {section}{\numberline {4.1}評価指標}{24}
 \contentsline {section}{\numberline {4.2}実データでの実験}{24}
-\contentsline {section}{\numberline {4.3}大小異なるデータでの実験}{30}
+\contentsline {section}{\numberline {4.3}サイズの異なるデータでの実験}{30}
 \contentsline {chapter}{\numberline {第5章}まとめ}{33}
 \contentsline {chapter}{\hbox to\@lnumwidth {\hfil }謝辞}{34}
 \contentsline {chapter}{\hbox to\@lnumwidth {\hfil }参考文献}{35}
