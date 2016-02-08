@@ -7,7 +7,7 @@ def calcfinalscore
 		puts "calFinalScore"
 
 		
-		queryPage = [192,196,246,424,659,809,2120,2142,2143,2144,2145,2146,211,494,2165,2166,247,1068,252,2215,335,489,658,892,924,1372,1787,2475,2476,2477]
+		queryPage = [1,1570,2295,2498,5926,6485,6585,8427,8492,8999,9985,23,169,286,310,391,414,462,478,651,787,797,887,900,921,957,958,959,982,1184]
 
 		# クラスター毎にクエリページをいくつ含むか
 		counter = []
@@ -40,29 +40,14 @@ def calcfinalscore
 			if(counter[clusterNum] != 0)
 				w[clusterNum] = counter[clusterNum] * 1.0 / (queryPage.size * eval("@aScoreSortOutput#{clusterNum}").size * 1.0)
 				#w[clusterNum] = counter[clusterNum] * 1.0 / eval("@aScoreSortOutput#{clusterNum}").size * 1.0
-				#w[clusterNum] = counter[clusterNum] * eval("@aScoreSortOutput#{clusterNum}").size * 1.0 / (queryPage.size * 1.0)
 			else
 				w[clusterNum] = 0
 			end
 	
 		end
 
-		wCopy = w.clone
-
-		wCopy.delete(0)
-
-		wCopy = wCopy.sort {|a, b| b <=> a }
-
-		# 中央値の算出
-		if wCopy.size % 2 != 0
-			i = wCopy.size.to_f / 2 - 0.5
-			average = wCopy[i]
-		else
-			average = (wCopy[wCopy.size / 2] + wCopy[(wCopy.size / 2) - 1]) / 2
-		end
-
 		# 重みの平均の算出
-		#average = w.inject(:+) / w.size
+		average = w.inject(:+) / w.size
 
 		# 重みの平均点
 		puts "-----------------"
@@ -70,7 +55,24 @@ def calcfinalscore
 		puts average
 
 		puts "重み"
-		p wCopy
+		p w
+
+
+		# w.size.times do |i|
+		# 	if w[i] > 0
+		# 		eval("@aScoreSortOutput#{i}").each do |j|
+		# 			newSocre = j[1].to_f * w[i]
+		# 			@finalAuthorityScore[j[0]] = @finalAuthorityScore[j[1]].to_f + newSocre
+		# 			puts "@finalAuthorityScore[33]"
+		# 			puts @finalAuthorityScore["33"] 
+		# 		end
+
+		# 		eval("@hScoreSortOutput#{i}").each do |j|
+		# 			newSocre = j[1].to_f * w[i]
+		# 			@finalHubScore[j[0]] =  @finalHubScore[j[1]].to_f + newSocre
+		# 		end
+		# 	end
+		# end
 
 		w.size.times do |i|
 			if w[i] > average
@@ -91,7 +93,7 @@ def calcfinalscore
 		#p @finalAuthorityScore
 		#p @finalAuthorityScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }	
 		@finalAuthorityScore = @finalAuthorityScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
-		# p @finalAuthorityScore
+		#p @finalAuthorityScore
 		$rankingSize.times do |i|
 			print @finalAuthorityScore[i][0].to_i
 			puts ","
@@ -102,7 +104,7 @@ def calcfinalscore
 		#p @finalHubScore
 		#p @finalHubScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }	
 		@finalHubScore = @finalHubScore.sort {|(k1, v1), (k2, v2)| v2 <=> v1 }
-		# p @finalHubScore
+		#p @finalHubScore
 		$rankingSize.times do |i|
 			print @finalHubScore[i][0].to_i
 			puts ","

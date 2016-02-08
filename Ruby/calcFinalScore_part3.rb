@@ -7,7 +7,7 @@ def calcfinalscore
 		puts "calFinalScore"
 
 		
-		queryPage = [1,2295,2498,6485,191,462,373,958,391,396,414,1034,2979,3202,5672,6866,6894,7522,7874,7916,8492,9978,565,848,8555,957,1162,1215,2061,3173]
+		queryPage = [0,3,4,5,8,703,826,1097,1287,1591,1895,1896,1897,1898,1899,144,258,491,1021,1418,1669,1900,1901,1902,1903,121,127,128,179,247]
 
 		# クラスター毎にクエリページをいくつ含むか
 		counter = []
@@ -42,7 +42,7 @@ def calcfinalscore
 				#w[clusterNum] = counter[clusterNum] * 1.0 / (queryPage.size * eval("@aScoreSortOutput#{clusterNum}").size * 1.0)
 				#w[clusterNum] = counter[clusterNum] * 1.0 / eval("@aScoreSortOutput#{clusterNum}").size * 1.0
 			else
-				w[clusterNum] = 0
+				w[clusterNum] = 1
 			end
 	
 		end

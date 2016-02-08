@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015) (preloaded format=platex 2016.1.10)  24 JAN 2016 19:21
+This is e-pTeX, Version 3.14159265-p3.6-141210-2.6 (utf8.euc) (TeX Live 2015) (preloaded format=platex 2016.1.10)  8 FEB 2016 02:20
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -252,6 +252,45 @@ LaTeX Warning: Label `figure:sample' multiply defined.
 
 LaTeX Warning: Label `figure:sample' multiply defined.
 
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `figure:sample' multiply defined.
+
+
+LaTeX Warning: Label `google' multiply defined.
+
 )
 \openout1 = `salsa-GoSato-utf8.aux'.
 
@@ -306,35 +345,35 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 68.
  [0]
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <20.74> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 85.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 84.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <20.74> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 85.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 84.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20.74> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 85.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 84.
  (./salsa-GoSato-utf8.toc)
 \tf@toc=\write3
 \openout3 = `salsa-GoSato-utf8.toc'.
 
  [1
 
-] (./salsa-GoSato-utf8.lof)
+] (./salsa-GoSato-utf8.lof [2
+
+])
 \tf@lof=\write4
 \openout4 = `salsa-GoSato-utf8.lof'.
 
- [2
-
-]
+ [3]
 第 1 章
 [1
 
 ] [2]
 第 2 章
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 115.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 114.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 115.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 114.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 115.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 114.
 File: image/webgraph.eps Graphic file (type eps)
 <image/webgraph.eps> [3
 
@@ -355,22 +394,24 @@ File: image/query2.eps Graphic file (type eps)
  <image/query2.eps>
 File: image/query3.eps Graphic file (type eps)
  <image/query3.eps>
-Overfull \hbox (18.0675pt too wide) in paragraph at lines 309--311
+Overfull \hbox (18.0675pt too wide) in paragraph at lines 308--310
  [] 
  []
 
 [9]
 File: image/clustering1.eps Graphic file (type eps)
- <image/clustering1.eps>
+ <image/clustering1.eps> [10]
 File: image/clustering2.eps Graphic file (type eps)
- <image/clustering2.eps> [10] [11]
+ <image/clustering2.eps> [11]
 File: image/rootset1.eps Graphic file (type eps)
 
 <image/rootset1.eps>
 File: image/rootset2.eps Graphic file (type eps)
  <image/rootset2.eps>
 File: image/rootset3.eps Graphic file (type eps)
- <image/rootset3.eps> [12] [13]
+ <image/rootset3.eps> [12
+
+] [13]
 File: image/rootset4.eps Graphic file (type eps)
 
 <image/rootset4.eps>
@@ -391,56 +432,83 @@ File: image/score2.eps Graphic file (type eps)
 第 4 章
 [24
 
+] [25] [26]
+File: image/result_response01.eps Graphic file (type eps)
+ <image/result_response01.eps>
+File: image/result_response02.eps Graphic file (type eps)
+ <image/result_response02.eps>
+File: image/result_response03.eps Graphic file (type eps)
+
+<image/result_response03.eps> [27
+
+] [28]
+File: image/authresult01.eps Graphic file (type eps)
+ <image/authresult01.eps>
+File: image/hubresult01.eps Graphic file (type eps)
+
+<image/hubresult01.eps>
+File: image/authresult02.eps Graphic file (type eps)
+ <image/authresult02.eps>
+File: image/hubresult02.eps Graphic file (type eps)
+ <image/hubresult02.eps>
+File: image/authresult03.eps Graphic file (type eps)
+
+<image/authresult03.eps>
+File: image/hubresult03.eps Graphic file (type eps)
+ <image/hubresult03.eps> [29
+
+] [30] [31] [32] [33
+
 ]
-File: image/response01.eps Graphic file (type eps)
- <image/response01.eps> [25] [26] [27]
-File: image/auth01.eps Graphic file (type eps)
- <image/auth01.eps>
-File: image/hub01.eps Graphic file (type eps)
+File: image/data0101.eps Graphic file (type eps)
 
-<image/hub01.eps> [28
+<image/data0101.eps>
+File: image/data0102.eps Graphic file (type eps)
+ <image/data0102.eps>
+File: image/data0103.eps Graphic file (type eps)
+ <image/data0103.eps> [34
 
-] [29]
-File: image/data01.eps Graphic file (type eps)
- <image/data01.eps>
-File: image/data02.eps Graphic file (type eps)
- <image/data02.eps>
-File: image/data03.eps Graphic file (type eps)
+] [35]
+[36]
+File: image/data0201.eps Graphic file (type eps)
+ <image/data0201.eps>
+File: image/data0202.eps Graphic file (type eps)
+ <image/data0202.eps>
+File: image/data0203.eps Graphic file (type eps)
+ <image/data0203.eps> [37
 
-<image/data03.eps> [30
+]
+[38]
+File: image/data0301.eps Graphic file (type eps)
+ <image/data0301.eps>
+File: image/data0302.eps Graphic file (type eps)
+ <image/data0302.eps>
+File: image/data0303.eps Graphic file (type eps)
+ <image/data0303.eps> [39
 
-] [31] [32]
+]
+[40] [41
+
+]
 第 5 章
-[33
+[42
 
-] [34
+] [43
 
-]
-
-LaTeX Font Warning: Font shape `JT1/gt/m/it' undefined
-(Font)              using `JT1/gt/m/n' instead on input line 895.
-
-
-LaTeX Font Warning: Font shape `JY1/gt/m/it' undefined
-(Font)              using `JY1/gt/m/n' instead on input line 895.
-
-[35
+] [44
 
 ] (./salsa-GoSato-utf8.aux)
-
-LaTeX Font Warning: Some font shapes were not available, defaults substituted.
-
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 2064 strings out of 493742
- 25014 string characters out of 6151252
- 92958 words of memory out of 5000000
- 5535 multiletter control sequences out of 15000+600000
- 21069 words of font info for 76 fonts, out of 8000000 for 9000
+ 2084 strings out of 493742
+ 25421 string characters out of 6151252
+ 91958 words of memory out of 5000000
+ 5544 multiletter control sequences out of 15000+600000
+ 20521 words of font info for 75 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
  32i,7n,26p,608b,630s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on salsa-GoSato-utf8.dvi (39 pages, 89860 bytes).
+Output written on salsa-GoSato-utf8.dvi (49 pages, 100076 bytes).

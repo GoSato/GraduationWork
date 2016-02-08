@@ -1,13 +1,13 @@
 def calcfinalscore
 	result = Benchmark.realtime do
 
-		$rankingSize = 20
+		$rankingSize = 50
 
 		puts "-----------------"
 		puts "calFinalScore"
 
 		
-		queryPage = [1,3,2,4,8,9,10,14,28,29]
+		queryPage = [5,843,1476,4562,4663,4664,4665,4666,4667,4668,4669,4670,2894,8157,8617,7376,9119,9120,9121,9122,9123,9124,9125,9126,9127,11054,16938,20241,20371,20372]
 
 		# クラスター毎にクエリページをいくつ含むか
 		counter = []
@@ -53,9 +53,6 @@ def calcfinalscore
 
 		wCopy = wCopy.sort {|a, b| b <=> a }
 
-		puts "wCopy"
-		p wCopy
-
 		# 中央値の算出
 		if wCopy.size % 2 != 0
 			i = wCopy.size.to_f / 2 - 0.5
@@ -76,7 +73,7 @@ def calcfinalscore
 		p wCopy
 
 		w.size.times do |i|
-			if w[i] > 0
+			#if w[i] > average
 				eval("@aScoreSortOutput#{i}").each do |j|
 					newAutoritySocre[j[0]] =  j[1].to_f * w[i]
 					@finalAuthorityScore[j[0]] = @finalAuthorityScore[j[0]].to_f + newAutoritySocre[j[0]].to_f
@@ -86,7 +83,7 @@ def calcfinalscore
 					newHubSocre[j[0]] = j[1].to_f * w[i]
 					@finalHubScore[j[0]] =  @finalHubScore[j[0]].to_f + newHubSocre[j[0]].to_f
 				end
-			end
+			#end
 		end
 
 		puts "-----------------"

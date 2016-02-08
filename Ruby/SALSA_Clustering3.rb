@@ -4,7 +4,7 @@
 
 require 'benchmark'
 require 'matrix'
-require_relative './calcFinalScore2.rb'
+require_relative './calcFinalScore3.rb'
 
 class SALSA
 

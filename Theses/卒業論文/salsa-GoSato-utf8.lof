@@ -2,7 +2,7 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces WEBグラフ}}{3}
 \contentsline {figure}{\numberline {2.2}{\ignorespaces PageRankの概念図}}{4}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces 権威とハブ}}{5}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces 権威ページとハブページ}}{5}
 \contentsline {figure}{\numberline {2.4}{\ignorespaces root setとbase set}}{6}
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces クエリ独立型リンク解析手法}}{8}
@@ -21,10 +21,22 @@
 \contentsline {figure}{\numberline {3.14}{\ignorespaces クエリページが含まれるクラスタの抽出}}{21}
 \contentsline {figure}{\numberline {3.15}{\ignorespaces 重みが中央値以上であるクラスタの抽出}}{22}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces 閾値による応答時間の変化}}{27}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces 権威適合率における実験結果}}{28}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces ハブ適合率における実験結果}}{29}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces データ1における実験結果}}{31}
-\contentsline {figure}{\numberline {4.5}{\ignorespaces データ2における実験結果}}{31}
-\contentsline {figure}{\numberline {4.6}{\ignorespaces データ3における実験結果}}{32}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces 応答時間(閾値0.5)}}{27}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces 応答時間(閾値0.05)}}{28}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces 応答時間(閾値0.005)}}{28}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces 権威適合率(閾値0.5)}}{29}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces ハブ適合率(閾値0.5)}}{30}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces 権威適合率(閾値0.05)}}{30}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces ハブ適合率(閾値0.05)}}{31}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces 権威適合率(閾値0.005)}}{31}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces ハブ適合率(閾値0.005)}}{32}
+\contentsline {figure}{\numberline {4.10}{\ignorespaces 応答時間(データ1)}}{35}
+\contentsline {figure}{\numberline {4.11}{\ignorespaces 権威適合率(データ1)}}{35}
+\contentsline {figure}{\numberline {4.12}{\ignorespaces ハブ適合率(データ1)}}{36}
+\contentsline {figure}{\numberline {4.13}{\ignorespaces 応答時間(データ2)}}{37}
+\contentsline {figure}{\numberline {4.14}{\ignorespaces 権威適合率(データ2)}}{38}
+\contentsline {figure}{\numberline {4.15}{\ignorespaces ハブ適合率(データ2)}}{38}
+\contentsline {figure}{\numberline {4.16}{\ignorespaces 応答時間(データ3)}}{39}
+\contentsline {figure}{\numberline {4.17}{\ignorespaces 権威適合率(データ3)}}{40}
+\contentsline {figure}{\numberline {4.18}{\ignorespaces ハブ適合率(データ3)}}{40}
 \addvspace {10\p@ }

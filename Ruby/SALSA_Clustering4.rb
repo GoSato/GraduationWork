@@ -1,6 +1,6 @@
 require 'benchmark'
 require 'matrix'
-require_relative './calcFinalScore2.rb'
+require_relative './calcFinalScore4.rb'
 
 class SALSA
 
@@ -19,13 +19,6 @@ class SALSA
 				x += 1
 			end
 		}
-
-		puts "-----最初のファイル------"
-		puts "@file"
-		p @file
-		puts "--------------"
-		puts "@file.size"
-		puts @file.size
 
 		return @file.size	
 	end
@@ -117,12 +110,6 @@ class SALSA
 			end		
 		end
 
-		puts "-------ファイルからシードと関係のあるの消去-------"
-		puts "@file"
-		p @file
-		puts "--------------"
-		puts "@file.size"
-		puts @file.size
 
 		# 初期セットのサイズが100以下の時
 		for i in initialSetList do
@@ -159,13 +146,6 @@ class SALSA
 				count -= 1
 			end	
 		end
-
-		puts "-------初期セット同士の行を消去-------"
-		puts "@file"
-		p @file
-		puts "--------------"
-		puts "@file.size"
-		puts @file.size
 
 		@firstDensity = @linkCount.to_f / @number.size.to_f
 
@@ -394,7 +374,7 @@ class SALSA
 
 		if(maxAuthority != nil)
 			#if(maxAuthority[1] > $threshold)
-			if(@density  >= @firstDensity)
+			if(@density  >= 0.3)
 			#if(@density >= 0.01)
 				return maxAuthority[0]
 			else
@@ -421,7 +401,7 @@ class SALSA
 
 		if(maxHub != nil)
 			#if(maxHub[1] > $threshold)
-			if(@density >= @firstDensity)
+			if(@density >= 0.3)
 			#if(@density >= 0.01)
 				return maxHub[0]
 			else
